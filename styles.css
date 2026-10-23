@@ -325,6 +325,8 @@ input, textarea, select, button { font: inherit; }
 .tag { align-self: flex-start; padding: 4px 10px; border-radius: 999px; background: #E6EBFF; color: #2340C4; font-size: 12px; font-weight: 600; }
 .project h3 { font-size: 20px; }
 .project p { font-size: 15px; line-height: 1.6; color: #4A5578; }
+.project p a { color: #2340C4; font-weight: 600; text-decoration: underline; text-underline-offset: 3px; }
+.project p a:hover { color: var(--navy); }
 .project-link { display: inline-flex; align-items: center; gap: 6px; margin-top: 4px; font-size: 15px; font-weight: 600; color: #2340C4; }
 .project-link svg { width: 16px; height: 16px; transition: transform .2s ease; }
 .project-link:hover svg { transform: translate(2px, -2px); }
