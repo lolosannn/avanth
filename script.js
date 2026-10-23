@@ -1,11 +1,11 @@
 // Completá estos datos y se actualizan en toda la página.
 const CONFIG = {
-  email: '',          // ej: 'hola@avanth.studio'
-  whatsapp: '',       // solo números con código de país, ej: '5491112345678'
-  whatsappLabel: '',  // cómo se muestra, ej: '+54 9 11 1234-5678'
+  email: 'avanth.studio@gmail.com',
+  whatsapp: '5491160342441',          // solo números con código de país
+  whatsappLabel: '+54 9 11 6034-2441',
   whatsappMessage: 'Hola Avanth! Quiero consultar por un proyecto.',
   social: {
-    instagram: '',    // ej: 'https://instagram.com/avanth.studio'
+    instagram: 'https://www.instagram.com/avanth.studio/',
     linkedin: '',
     github: ''
   }
@@ -39,8 +39,7 @@ document.querySelectorAll('[data-social]').forEach((a) => {
   if (url) {
     a.href = url;
   } else {
-    a.href = '#contacto';
-    a.removeAttribute('target');
+    a.remove();
   }
 });
 
