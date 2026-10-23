@@ -111,6 +111,36 @@ function assignSlideDirections() {
 assignSlideDirections();
 window.addEventListener('resize', assignSlideDirections);
 
+// "Ideas que avanzan": selecciona la palabra, la borra y escribe un sinónimo
+const swap = document.querySelector('.word-swap');
+const reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+if (swap && !reduceMotion) {
+  const textEl = swap.querySelector('.word-swap-text');
+  const words = swap.dataset.words.split(',');
+  const sleep = (ms) => new Promise((r) => setTimeout(r, ms));
+  let i = 0;
+
+  (async function loop() {
+    for (;;) {
+      await sleep(2200);              // la palabra queda visible
+      swap.classList.add('selected'); // se selecciona en azul
+      await sleep(900);
+      textEl.textContent = '';        // se borra
+      swap.classList.remove('selected');
+      swap.classList.add('typing');
+      await sleep(250);
+
+      i = (i + 1) % words.length;
+      for (const ch of words[i]) {    // se escribe el sinónimo
+        textEl.textContent += ch;
+        await sleep(90);
+      }
+      swap.classList.remove('typing');
+    }
+  })();
+}
+
 // Animación al hacer scroll
 const revealEls = document.querySelectorAll('.reveal, .card.slide');
 
