@@ -198,14 +198,16 @@ input, textarea, select, button { font: inherit; }
 .card {
   display: flex; flex-direction: column; gap: 16px; padding: 32px 28px; border-radius: var(--radius);
   background: var(--surface); border: 1px solid var(--line); min-height: 240px;
-  transition: translate .2s ease, border-color .2s ease;
+  transition: translate .2s ease, border-color .25s ease, background-color .25s ease;
 }
-.card:hover { translate: 0 -4px; border-color: rgba(143, 163, 255, 0.4); }
+.card:hover { translate: 0 -4px; background: #1A2560; border-color: rgba(143, 163, 255, 0.55); }
+.card:hover .card-icon { background: var(--blue); color: #fff; }
+.card:hover p { color: #D3D9F0; }
 
 /* Las filas impares entran desde la derecha y las pares desde la izquierda (ver script.js) */
 .card.slide {
   opacity: 0;
-  transition: opacity .8s ease, transform .9s cubic-bezier(.16, 1, .3, 1), translate .2s ease, border-color .2s ease;
+  transition: opacity .8s ease, transform .9s cubic-bezier(.16, 1, .3, 1), translate .2s ease, border-color .25s ease, background-color .25s ease;
 }
 .card.slide.from-right { transform: translateX(120px); }
 .card.slide.from-left { transform: translateX(-120px); }
@@ -213,7 +215,7 @@ input, textarea, select, button { font: inherit; }
 
 /* Avioncito de papel */
 .paper-plane {
-  position: absolute; top: 32px; right: calc(50% - 660px); width: 180px; height: auto;
+  position: absolute; top: 96px; left: calc(50% + 606px); width: 180px; height: auto;
   stroke: rgba(255, 255, 255, 0.75); stroke-width: 2; stroke-linecap: round; stroke-linejoin: round;
   pointer-events: none;
 }
@@ -227,10 +229,11 @@ input, textarea, select, button { font: inherit; }
 .card-icon {
   width: 52px; height: 52px; border-radius: 14px; background: rgba(43, 75, 224, 0.18);
   display: flex; align-items: center; justify-content: center; color: var(--blue-light);
+  transition: background-color .25s ease, color .25s ease;
 }
 .card-icon svg { width: 26px; height: 26px; }
 .card h3 { font-size: 22px; line-height: 1.25; }
-.card p { font-size: 15px; line-height: 1.6; color: var(--text-2); }
+.card p { font-size: 15px; line-height: 1.6; color: var(--text-2); transition: color .25s ease; }
 
 /* About */
 .about { padding: 120px 0; }
@@ -342,7 +345,7 @@ input, textarea, select, button { font: inherit; }
 .reveal.visible { opacity: 1; transform: none; }
 
 /* Responsive */
-@media (max-width: 1100px) {
+@media (max-width: 1360px) {
   .paper-plane { display: none; }
 }
 
