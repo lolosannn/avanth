@@ -83,15 +83,48 @@ form.addEventListener('submit', (e) => {
   }
 });
 
+// Tarjetas de servicios: cada fila entra desde un lado distinto
+const slideCards = [...document.querySelectorAll('.card.slide')];
+
+function assignSlideDirections() {
+  const rows = [];
+  slideCards.forEach((card) => {
+    let row = rows.find((r) => Math.abs(r.top - card.offsetTop) < 4);
+    if (!row) {
+      row = { top: card.offsetTop, cards: [] };
+      rows.push(row);
+    }
+    row.cards.push(card);
+  });
+  rows.sort((a, b) => a.top - b.top).forEach((row, i) => {
+    const fromRight = i % 2 === 0;
+    // La primera tarjeta en moverse es la más cercana al lado de entrada
+    const ordered = fromRight ? [...row.cards].reverse() : row.cards;
+    ordered.forEach((card, j) => {
+      card.classList.toggle('from-right', fromRight);
+      card.classList.toggle('from-left', !fromRight);
+      card.style.transitionDelay = card.classList.contains('visible') ? '' : `${j * 0.12}s`;
+    });
+  });
+}
+
+assignSlideDirections();
+window.addEventListener('resize', assignSlideDirections);
+
 // Animación al hacer scroll
-const revealEls = document.querySelectorAll('.reveal');
+const revealEls = document.querySelectorAll('.reveal, .card.slide');
 
 if ('IntersectionObserver' in window) {
   const io = new IntersectionObserver((entries) => {
     entries.forEach((entry) => {
       if (entry.isIntersecting) {
-        entry.target.classList.add('visible');
-        io.unobserve(entry.target);
+        const el = entry.target;
+        el.classList.add('visible');
+        io.unobserve(el);
+        // Sin demora después de entrar, así el hover responde al instante
+        if (el.classList.contains('slide')) {
+          el.addEventListener('transitionend', () => { el.style.transitionDelay = ''; }, { once: true });
+        }
       }
     });
   }, { threshold: 0.12 });
