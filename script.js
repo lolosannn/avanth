@@ -1,3 +1,12 @@
+'use strict';
+
+// Evita que otra web muestre esta página dentro de un iframe (clickjacking).
+// GitHub Pages no permite enviar la cabecera frame-ancestors, así que se hace acá.
+if (window.top !== window.self) {
+  try { window.top.location.replace(window.self.location.href); }
+  catch { document.documentElement.hidden = true; }
+}
+
 // Completá estos datos y se actualizan en toda la página.
 const CONFIG = {
   email: 'avanth.studio@gmail.com',
@@ -11,6 +20,15 @@ const CONFIG = {
   }
 };
 
+// Solo se aceptan datos con formato válido, por si alguien edita CONFIG por error
+const isPhone = (v) => /^\d{8,15}$/.test(v);
+const isEmail = (v) => /^[^\s@<>"']+@[^\s@<>"']+\.[a-z]{2,}$/i.test(v);
+const isSafeUrl = (v) => {
+  try { return new URL(v).protocol === 'https:'; } catch { return false; }
+};
+if (!isPhone(CONFIG.whatsapp)) CONFIG.whatsapp = '';
+if (!isEmail(CONFIG.email)) CONFIG.email = '';
+
 // Links de contacto
 const waUrl = CONFIG.whatsapp
   ? `https://wa.me/${CONFIG.whatsapp}?text=${encodeURIComponent(CONFIG.whatsappMessage)}`
@@ -20,7 +38,7 @@ document.querySelectorAll('[data-whatsapp]').forEach((a) => {
   a.href = waUrl;
   if (CONFIG.whatsapp) {
     a.target = '_blank';
-    a.rel = 'noopener';
+    a.rel = 'noopener noreferrer';
   }
 });
 document.querySelectorAll('[data-whatsapp-text]').forEach((el) => {
@@ -36,7 +54,7 @@ document.querySelectorAll('[data-email-text]').forEach((el) => {
 
 document.querySelectorAll('[data-social]').forEach((a) => {
   const url = CONFIG.social[a.dataset.social];
-  if (url) {
+  if (url && isSafeUrl(url)) {
     a.href = url;
   } else {
     a.remove();
@@ -62,21 +80,51 @@ links.querySelectorAll('a').forEach((a) => {
 
 // Formulario: arma el mensaje y lo abre en WhatsApp o en el mail
 const form = document.getElementById('contact-form');
+const SERVICIOS = [...form.elements.servicio.options].map((o) => o.value);
+const SEND_COOLDOWN = 30000; // ms entre envíos, para frenar spam
+let lastSent = 0;
+
+// Quita caracteres de control y espacios de más, y corta al largo máximo
+const clean = (v, max) => String(v || '')
+  .replace(/[\u0000-\u0008\u000B-\u001F\u007F-\u009F\u200B-\u200F\u202A-\u202E\u2066-\u2069]/g, '')
+  .replace(/[ \t]+$/gm, '')
+  .trim()
+  .slice(0, max);
 
 form.addEventListener('submit', (e) => {
   e.preventDefault();
   if (!form.reportValidity()) return;
 
   const data = new FormData(form);
+  // Si el campo trampa vino completo, es un bot: no se envía nada
+  if (data.get('website')) return;
+
+  const now = Date.now();
+  if (now - lastSent < SEND_COOLDOWN) {
+    alert('Ya enviaste un mensaje. Esperá unos segundos antes de volver a intentar.');
+    return;
+  }
+
+  const nombre = clean(data.get('nombre'), 80).replace(/\s+/g, ' ');
+  const email = clean(data.get('email'), 120);
+  const servicio = SERVICIOS.includes(data.get('servicio')) ? data.get('servicio') : 'Otro';
+  const mensaje = clean(data.get('mensaje'), 2000);
+
+  if (!nombre || !isEmail(email) || !mensaje) {
+    alert('Revisá los datos del formulario.');
+    return;
+  }
+  lastSent = now;
+
   const text =
-    `Hola! Soy ${data.get('nombre')} (${data.get('email')}).\n` +
-    `Me interesa: ${data.get('servicio')}.\n\n` +
-    `${data.get('mensaje')}`;
+    `Hola! Soy ${nombre} (${email}).\n` +
+    `Me interesa: ${servicio}.\n\n` +
+    `${mensaje}`;
 
   if (CONFIG.whatsapp) {
-    window.open(`https://wa.me/${CONFIG.whatsapp}?text=${encodeURIComponent(text)}`, '_blank', 'noopener');
+    window.open(`https://wa.me/${CONFIG.whatsapp}?text=${encodeURIComponent(text)}`, '_blank', 'noopener,noreferrer');
   } else if (CONFIG.email) {
-    const subject = `Consulta: ${data.get('servicio')}`;
+    const subject = `Consulta: ${servicio}`;
     window.location.href = `mailto:${CONFIG.email}?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(text)}`;
   } else {
     alert('Configurá tu email o WhatsApp en script.js para recibir mensajes.');
@@ -195,7 +243,10 @@ const videoModal = document.querySelector('.video-modal');
 const modalVideo = videoModal.querySelector('video');
 
 const openVideo = (v) => {
-  modalVideo.src = v.currentSrc || v.src;
+  // Solo videos del propio sitio
+  const src = new URL(v.currentSrc || v.src, location.href);
+  if (src.origin !== location.origin) return;
+  modalVideo.src = src.href;
   modalVideo.poster = v.poster;
   modalVideo.setAttribute('aria-label', v.getAttribute('aria-label') || '');
   modalVideo.currentTime = v.currentTime;

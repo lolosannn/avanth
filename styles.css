@@ -498,3 +498,18 @@ html:has(.video-modal[open]) { overflow: hidden; }
   .marquee-track .tech-list { flex-wrap: wrap; justify-content: center; gap: 16px 40px; padding: 0; }
   .marquee-track .tech-list[aria-hidden] { display: none; }
 }
+
+/* Utilidades (reemplazan estilos en línea, así la CSP no necesita 'unsafe-inline') */
+.browser-bar span.c-red { background: #FF5F57; }
+.browser-bar span.c-yellow { background: #FEBC2E; }
+.browser-bar span.c-green { background: #28C840; }
+.w-48 { width: 48%; }
+.w-55 { width: 55%; }
+.w-62 { width: 62%; }
+.w-75 { width: 75%; }
+.mt-6 { margin-top: 6px; }
+.dot.dot-sm { width: 7px; height: 7px; }
+.btn svg.icon-16, .icon-16 { width: 16px; height: 16px; }
+
+/* Campo trampa anti-spam del formulario */
+.hp { position: absolute; left: -10000px; width: 1px; height: 1px; overflow: hidden; }

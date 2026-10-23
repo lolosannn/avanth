@@ -3,6 +3,8 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta http-equiv="Content-Security-Policy" content="default-src 'none'; script-src 'self'; style-src 'self' https://fonts.googleapis.com; font-src https://fonts.gstatic.com; img-src 'self' data:; media-src 'self'; connect-src 'self'; manifest-src 'self'; form-action 'self'; base-uri 'none'; object-src 'none'; upgrade-insecure-requests">
+  <meta name="referrer" content="strict-origin-when-cross-origin">
   <title>Avanth Studio — Diseño web, automatización y software a medida</title>
   <meta name="description" content="Avanth Studio: diseño web, automatización de procesos y desarrollo de software a medida para que tu negocio avance.">
   <meta name="theme-color" content="#070B1F">
@@ -62,16 +64,16 @@
           <div class="hero-visual" aria-hidden="true">
             <div class="browser">
               <div class="browser-bar">
-                <span class="c" style="background:#FF5F57"></span>
-                <span class="c" style="background:#FEBC2E"></span>
-                <span class="c" style="background:#28C840"></span>
+                <span class="c c-red"></span>
+                <span class="c c-yellow"></span>
+                <span class="c c-green"></span>
                 <span class="browser-url">tumarca.com</span>
               </div>
               <div class="browser-body">
-                <div class="sk sk-title" style="width:55%"></div>
-                <div class="sk sk-title" style="width:75%"></div>
-                <div class="sk sk-line" style="width:62%;margin-top:6px"></div>
-                <div class="sk sk-line" style="width:48%"></div>
+                <div class="sk sk-title w-55"></div>
+                <div class="sk sk-title w-75"></div>
+                <div class="sk sk-line w-62 mt-6"></div>
+                <div class="sk sk-line w-48"></div>
                 <div class="sk-row"><div class="sk-btn"></div><div class="sk-btn-o"></div></div>
                 <div class="sk-cards"><div></div><div></div><div></div></div>
               </div>
@@ -80,7 +82,7 @@
             <div class="flow-card">
               <div class="flow-head">
                 <span>Flujo: nuevo lead</span>
-                <span class="flow-status"><span class="dot dot-pulse" style="width:7px;height:7px"></span>Activo</span>
+                <span class="flow-status"><span class="dot dot-pulse dot-sm"></span>Activo</span>
               </div>
               <div class="flow-steps">
                 <div class="flow-step">
@@ -229,7 +231,7 @@
             <h2 class="section-title">Sitios web recientes</h2>
           </div>
           <button type="button" class="btn btn-outline-dark projects-toggle" aria-expanded="false" aria-controls="project-grid">Ver todos
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" style="width:16px;height:16px"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" class="icon-16"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
           </button>
         </div>
         <!-- Solo proyectos web. Cada video va en assets/proyectos/ como:
@@ -262,7 +264,7 @@
             <div class="project-body">
               <span class="tag">Invitación web</span>
               <h3>Los XV de Matilda</h3>
-              <p>Matilda cumplía 15 y quería una invitación a su altura. Creamos una web elegante que se personaliza para cada invitado: cada uno recibe su propio link con su nombre, y adentro encuentra la fecha, el lugar, el dress code y la confirmación de asistencia. Lo hicimos en equipo con <a href="https://www.instagram.com/nose.estudio/" target="_blank" rel="noopener">nose estudio</a>: ellos se encargaron del diseño y nosotros del desarrollo.</p>
+              <p>Matilda cumplía 15 y quería una invitación a su altura. Creamos una web elegante que se personaliza para cada invitado: cada uno recibe su propio link con su nombre, y adentro encuentra la fecha, el lugar, el dress code y la confirmación de asistencia. Lo hicimos en equipo con <a href="https://www.instagram.com/nose.estudio/" target="_blank" rel="noopener noreferrer">nose estudio</a>: ellos se encargaron del diseño y nosotros del desarrollo.</p>
             </div>
           </article>
           <article class="project reveal project-extra" hidden>
@@ -318,13 +320,13 @@
             </div>
           </div>
 
-          <form class="form" id="contact-form" novalidate>
+          <form class="form" id="contact-form" method="post" novalidate>
             <div class="form-row">
               <label>Nombre
-                <input type="text" name="nombre" placeholder="Tu nombre" required autocomplete="name">
+                <input type="text" name="nombre" placeholder="Tu nombre" required autocomplete="name" maxlength="80">
               </label>
               <label>Email
-                <input type="email" name="email" placeholder="tu@email.com" required autocomplete="email">
+                <input type="email" name="email" placeholder="tu@email.com" required autocomplete="email" maxlength="120">
               </label>
             </div>
             <label>¿Qué necesitás?
@@ -337,8 +339,12 @@
               </select>
             </label>
             <label>Contanos tu proyecto
-              <textarea name="mensaje" rows="4" placeholder="Objetivos, plazos, presupuesto aproximado…" required></textarea>
+              <textarea name="mensaje" rows="4" placeholder="Objetivos, plazos, presupuesto aproximado…" required maxlength="2000"></textarea>
             </label>
+            <!-- Campo trampa para bots: las personas no lo ven -->
+            <div class="hp" aria-hidden="true">
+              <label>No completar <input type="text" name="website" tabindex="-1" autocomplete="off"></label>
+            </div>
             <button type="submit" class="btn btn-navy">Enviar mensaje</button>
           </form>
         </div>
@@ -374,9 +380,9 @@
           </div>
           <div class="footer-col">
             <span>Redes</span>
-            <a href="#" data-social="instagram" target="_blank" rel="noopener">Instagram</a>
-            <a href="#" data-social="linkedin" target="_blank" rel="noopener">LinkedIn</a>
-            <a href="#" data-social="github" target="_blank" rel="noopener">GitHub</a>
+            <a href="#" data-social="instagram" target="_blank" rel="noopener noreferrer">Instagram</a>
+            <a href="#" data-social="linkedin" target="_blank" rel="noopener noreferrer">LinkedIn</a>
+            <a href="#" data-social="github" target="_blank" rel="noopener noreferrer">GitHub</a>
           </div>
         </div>
       </div>
