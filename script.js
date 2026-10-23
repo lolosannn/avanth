@@ -165,15 +165,62 @@ if ('IntersectionObserver' in window) {
 
 // Videos de proyectos: se reproducen solo cuando están en pantalla
 const projectVideos = document.querySelectorAll('.project-media video');
+const visibleVideos = new Set();
 
 if (projectVideos.length && 'IntersectionObserver' in window) {
   const vio = new IntersectionObserver((entries) => {
     entries.forEach(({ target, isIntersecting }) => {
-      if (isIntersecting) target.play().catch(() => {});
-      else target.pause();
+      if (isIntersecting) { visibleVideos.add(target); target.play().catch(() => {}); }
+      else { visibleVideos.delete(target); target.pause(); }
     });
   }, { threshold: 0.25 });
   projectVideos.forEach((v) => vio.observe(v));
 }
+
+// "Ver todos" muestra el resto de los proyectos
+const projectsToggle = document.querySelector('.projects-toggle');
+const extraProjects = document.querySelectorAll('.project-extra');
+
+projectsToggle.addEventListener('click', () => {
+  const open = projectsToggle.getAttribute('aria-expanded') !== 'true';
+  extraProjects.forEach((el) => { el.hidden = !open; });
+  projectsToggle.setAttribute('aria-expanded', open);
+  projectsToggle.firstChild.textContent = open ? 'Ver menos ' : 'Ver todos ';
+  projectsToggle.querySelector('svg').style.transform = open ? 'rotate(-90deg)' : '';
+  if (open) extraProjects[0].scrollIntoView({ behavior: 'smooth', block: 'center' });
+});
+
+// Al hacer clic en un video se abre en grande
+const videoModal = document.querySelector('.video-modal');
+const modalVideo = videoModal.querySelector('video');
+
+const openVideo = (v) => {
+  modalVideo.src = v.currentSrc || v.src;
+  modalVideo.poster = v.poster;
+  modalVideo.setAttribute('aria-label', v.getAttribute('aria-label') || '');
+  modalVideo.currentTime = v.currentTime;
+  projectVideos.forEach((pv) => pv.pause());
+  videoModal.showModal();
+  modalVideo.play().catch(() => {});
+};
+
+projectVideos.forEach((v) => {
+  const media = v.closest('.project-media');
+  media.tabIndex = 0;
+  media.setAttribute('role', 'button');
+  media.setAttribute('aria-label', `Ver en grande: ${v.getAttribute('aria-label') || 'video del proyecto'}`);
+  media.addEventListener('click', () => openVideo(v));
+  media.addEventListener('keydown', (e) => {
+    if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); openVideo(v); }
+  });
+});
+
+videoModal.querySelector('.video-modal-close').addEventListener('click', () => videoModal.close());
+// Clic fuera del video cierra
+videoModal.addEventListener('click', (e) => { if (e.target === videoModal) videoModal.close(); });
+videoModal.addEventListener('close', () => {
+  modalVideo.pause();
+  visibleVideos.forEach((v) => v.play().catch(() => {}));
+});
 
 document.getElementById('year').textContent = new Date().getFullYear();

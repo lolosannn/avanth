@@ -228,21 +228,21 @@
             <span class="eyebrow">Proyectos</span>
             <h2 class="section-title">Sitios web recientes</h2>
           </div>
-          <a href="#proyectos" class="btn btn-outline-dark">Ver todos
+          <button type="button" class="btn btn-outline-dark projects-toggle" aria-expanded="false" aria-controls="project-grid">Ver todos
             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" style="width:16px;height:16px"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
-          </a>
+          </button>
         </div>
         <!-- Solo proyectos web. Cada video va en assets/proyectos/ como:
              <video src="assets/proyectos/nombre.mp4" poster="assets/proyectos/nombre.jpg" muted loop playsinline preload="none"></video> -->
-        <div class="project-grid">
+        <div class="project-grid" id="project-grid">
           <article class="project reveal">
             <div class="project-media">
-              <video src="assets/proyectos/xv-matilda.mp4" poster="assets/proyectos/xv-matilda.jpg" muted loop playsinline preload="none" aria-label="Recorrido por la invitación web de los XV de Matilda"></video>
+              <video src="assets/proyectos/kroma-studio.mp4" poster="assets/proyectos/kroma-studio.jpg" muted loop playsinline preload="none" aria-label="Recorrido por la web de Kroma Studio"></video>
             </div>
             <div class="project-body">
-              <span class="tag">Invitación web</span>
-              <h3>Los XV de Matilda</h3>
-              <p>Matilda cumplía 15 y quería una invitación a su altura. Creamos una web elegante que se personaliza para cada invitado: cada uno recibe su propio link con su nombre, y adentro encuentra la fecha, el lugar, el dress code y la confirmación de asistencia. Un proyecto hecho con tiempo y cuidado en cada detalle.</p>
+              <span class="tag">Sitio institucional</span>
+              <h3>Kroma Studio</h3>
+              <p>Un estudio de arquitectura de Buenos Aires necesitaba una web a la altura de sus obras. Diseñamos un sitio sobrio y elegante, con fondo oscuro para que los proyectos sean protagonistas: portfolio con ficha de cada obra, servicios, testimonios y un formulario para pedir cotización.</p>
             </div>
           </article>
           <article class="project reveal">
@@ -257,12 +257,42 @@
           </article>
           <article class="project reveal">
             <div class="project-media">
+              <video src="assets/proyectos/xv-matilda.mp4" poster="assets/proyectos/xv-matilda.jpg" muted loop playsinline preload="none" aria-label="Recorrido por la invitación web de los XV de Matilda"></video>
+            </div>
+            <div class="project-body">
+              <span class="tag">Invitación web</span>
+              <h3>Los XV de Matilda</h3>
+              <p>Matilda cumplía 15 y quería una invitación a su altura. Creamos una web elegante que se personaliza para cada invitado: cada uno recibe su propio link con su nombre, y adentro encuentra la fecha, el lugar, el dress code y la confirmación de asistencia. Un proyecto hecho con tiempo y cuidado en cada detalle.</p>
+            </div>
+          </article>
+          <article class="project reveal project-extra" hidden>
+            <div class="project-media">
               <video src="assets/proyectos/lumina-bakery.mp4" poster="assets/proyectos/lumina-bakery.jpg" muted loop playsinline preload="none" aria-label="Recorrido por la tienda online de Lúmina Bakery"></video>
             </div>
             <div class="project-body">
               <span class="tag">Tienda online</span>
               <h3>Lúmina Bakery</h3>
               <p>Lúmina es una pastelería casera de budines, cookies y tortas. Le armamos una tienda con catálogo por categorías y carrito: el cliente elige sus productos y el pedido sale directo por WhatsApp. Además, tiene una sección para cafeterías y locales que quieren revender sus productos.</p>
+            </div>
+          </article>
+          <article class="project reveal project-extra" hidden>
+            <div class="project-media">
+              <video src="assets/proyectos/meridiano-tours.mp4" poster="assets/proyectos/meridiano-tours.jpg" muted loop playsinline preload="none" aria-label="Recorrido por la web de Meridiano Tours"></video>
+            </div>
+            <div class="project-body">
+              <span class="tag">Sitio institucional</span>
+              <h3>Meridiano Tours</h3>
+              <p>Una agencia de viajes que diseña escapadas a medida. Creamos una web luminosa y con mucho aire, donde cada destino tiene su propia ficha con fotos, duración, precio y lo que incluye el viaje, y la consulta se hace directo por WhatsApp.</p>
+            </div>
+          </article>
+          <article class="project reveal project-extra" hidden>
+            <div class="project-media">
+              <video src="assets/proyectos/cafe-ambar.mp4" poster="assets/proyectos/cafe-ambar.jpg" muted loop playsinline preload="none" aria-label="Recorrido por la web de Café Ámbar"></video>
+            </div>
+            <div class="project-body">
+              <span class="tag">Gastronomía</span>
+              <h3>Café Ámbar</h3>
+              <p>Una cafetería de especialidad con un rincón cálido en el barrio. Le armamos una web con la misma calidez del local: menú con fotos y precios separado por categorías, la historia del lugar, y dirección y horarios a mano para que sea fácil llegar.</p>
             </div>
           </article>
         </div>
@@ -357,6 +387,14 @@
   <a href="#contacto" class="wa-float" aria-label="Escribinos por WhatsApp" data-whatsapp>
     <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M21 12a9 9 0 0 1-13.5 7.8L3 21l1.2-4.5A9 9 0 1 1 21 12z"/><path d="M9 10c0 2.5 2.5 5 5 5l1-1.5-2-1-1 .8c-.8-.4-1.4-1-1.8-1.8l.8-1-1-2L9 10z"/></svg>
   </a>
+
+  <!-- Video de proyecto en grande -->
+  <dialog class="video-modal" aria-label="Video del proyecto">
+    <button class="video-modal-close" type="button" aria-label="Cerrar video">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6 6l12 12M18 6L6 18"/></svg>
+    </button>
+    <video controls muted loop playsinline></video>
+  </dialog>
 
   <script src="script.js"></script>
 </body>
