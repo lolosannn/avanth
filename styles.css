@@ -252,20 +252,23 @@ input, textarea, select, button { font: inherit; }
 .highlight { background: var(--blue); padding: 0 12px; border-radius: 6px; }
 
 /* Palabra que se selecciona, se borra y se reescribe (ver script.js) */
-.word-swap { white-space: nowrap; }
+/* Todas las palabras ocupan la misma celda: el ancho es siempre el de la más larga y nada se mueve */
+.word-swap { display: inline-grid; justify-items: start; white-space: nowrap; }
+.word-swap > span { grid-area: 1 / 1; }
+.word-swap-sizer { visibility: hidden; padding: 0 6px 0 6px; margin-right: 6px; }
 .word-swap-text {
   padding: 0 6px; border-radius: 6px;
   background: linear-gradient(var(--blue), var(--blue)) no-repeat left center / 0% 100%;
   transition: background-size .45s ease;
 }
 .word-swap.selected .word-swap-text { background-size: 100% 100%; }
-.word-swap::after {
-  content: ""; display: inline-block; width: 4px; height: .85em; margin-left: 2px;
+.word-swap-text::after {
+  content: ""; display: inline-block; width: 4px; height: .85em; margin-left: 2px; margin-right: -6px;
   vertical-align: -0.08em; background: var(--blue-light); border-radius: 2px;
   animation: caret 1s steps(1) infinite;
 }
-.word-swap.selected::after { visibility: hidden; }
-.word-swap.typing::after { animation: none; }
+.word-swap.selected .word-swap-text::after { visibility: hidden; }
+.word-swap.typing .word-swap-text::after { animation: none; }
 @keyframes caret { 50% { opacity: 0; } }
 .about-strong { font-size: 18px; font-weight: 600; }
 .about-copy .body { font-size: 17px; line-height: 1.75; color: var(--text-2); }
@@ -401,7 +404,7 @@ input, textarea, select, button { font: inherit; }
   html { scroll-behavior: auto; }
   *, *::before, *::after { animation: none !important; transition: none !important; }
   .reveal, .card.slide { opacity: 1; transform: none; }
-  .word-swap::after { display: none; }
+  .word-swap-text::after { display: none; }
   .word-swap-text { background-size: 100% 100%; }
   .marquee { -webkit-mask-image: none; mask-image: none; }
   .marquee-track { width: auto; justify-content: center; }
