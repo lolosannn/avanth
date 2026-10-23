@@ -177,6 +177,19 @@ if (projectVideos.length && 'IntersectionObserver' in window) {
   projectVideos.forEach((v) => vio.observe(v));
 }
 
+// "Ver todos" muestra el resto de los proyectos
+const projectsToggle = document.querySelector('.projects-toggle');
+const extraProjects = document.querySelectorAll('.project-extra');
+
+projectsToggle.addEventListener('click', () => {
+  const open = projectsToggle.getAttribute('aria-expanded') !== 'true';
+  extraProjects.forEach((el) => { el.hidden = !open; });
+  projectsToggle.setAttribute('aria-expanded', open);
+  projectsToggle.firstChild.textContent = open ? 'Ver menos ' : 'Ver todos ';
+  projectsToggle.querySelector('svg').style.transform = open ? 'rotate(-90deg)' : '';
+  if (open) extraProjects[0].scrollIntoView({ behavior: 'smooth', block: 'center' });
+});
+
 // Al hacer clic en un video se abre en grande
 const videoModal = document.querySelector('.video-modal');
 const modalVideo = videoModal.querySelector('video');

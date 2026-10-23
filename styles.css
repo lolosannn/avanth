@@ -68,7 +68,7 @@ input, textarea, select, button { font: inherit; }
 .btn-link { color: #fff; padding: 0 20px; border-radius: 0; border-bottom: 2px solid var(--blue); }
 .btn-whatsapp { background: var(--green); color: #04261A; border-radius: 12px; font-weight: 700; }
 .btn-whatsapp:hover { color: #04261A; }
-.btn-outline-dark { border: 1.5px solid var(--navy); color: var(--navy); min-height: 44px; padding: 0 20px; font-size: 15px; }
+.btn-outline-dark { background: transparent; border: 1.5px solid var(--navy); color: var(--navy); min-height: 44px; padding: 0 20px; font-size: 15px; }
 .btn-outline-dark:hover { background: var(--navy); color: #fff; }
 .btn-navy { background: var(--navy); color: #fff; border-radius: 12px; width: 100%; }
 .btn-navy:hover { background: var(--blue); }
@@ -304,6 +304,7 @@ input, textarea, select, button { font: inherit; }
   display: flex; flex-direction: column; border-radius: var(--radius); background: #fff;
   border: 1px solid #DFE4F5; overflow: hidden; transition: transform .2s ease, box-shadow .2s ease;
 }
+.project[hidden] { display: none; }
 .project:hover { transform: translateY(-4px); box-shadow: 0 20px 40px rgba(12, 24, 73, 0.12); }
 .project-media {
   aspect-ratio: 4 / 3; background: #E3E8FA; display: flex; align-items: center; justify-content: center;
