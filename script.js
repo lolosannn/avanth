@@ -163,4 +163,17 @@ if ('IntersectionObserver' in window) {
   revealEls.forEach((el) => el.classList.add('visible'));
 }
 
+// Videos de proyectos: se reproducen solo cuando están en pantalla
+const projectVideos = document.querySelectorAll('.project-media video');
+
+if (projectVideos.length && 'IntersectionObserver' in window) {
+  const vio = new IntersectionObserver((entries) => {
+    entries.forEach(({ target, isIntersecting }) => {
+      if (isIntersecting) target.play().catch(() => {});
+      else target.pause();
+    });
+  }, { threshold: 0.25 });
+  projectVideos.forEach((v) => vio.observe(v));
+}
+
 document.getElementById('year').textContent = new Date().getFullYear();
