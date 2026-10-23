@@ -339,6 +339,8 @@ input, textarea, select, button { font: inherit; }
   font-size: 15px; color: var(--navy); background: #fff; font-weight: 400;
 }
 .form textarea { padding: 12px 14px; resize: vertical; }
+.form label, .form-row label { min-width: 0; }
+.form input, .form select, .form textarea { width: 100%; min-width: 0; }
 .form input:focus, .form select:focus, .form textarea:focus { outline: 2px solid var(--blue); outline-offset: 1px; border-color: transparent; }
 
 /* Footer */
@@ -388,16 +390,63 @@ input, textarea, select, button { font: inherit; }
 
 @media (max-width: 600px) {
   .cards { grid-template-columns: minmax(0, 1fr); }
-  .card.slide.from-right { transform: translateX(60px); }
-  .card.slide.from-left { transform: translateX(-60px); }
-}
+  .card.slide.from-right:not(.visible) { transform: translateX(60px); }
+  .card.slide.from-left:not(.visible) { transform: translateX(-60px); }
 
-@media (max-width: 520px) {
-  .hero-visual { height: 520px; }
-  .browser { width: 100%; top: 150px; height: 260px; }
-  .flow-card { width: 100%; max-width: 300px; }
-  .terminal { right: 0; width: 260px; }
-  .footer-cols { gap: 32px; }
+  /* Espaciado general */
+  .container { padding: 0 20px; }
+  .hero { padding: 40px 0 56px; }
+  .services, .process, .projects, .contact { padding: 72px 0; }
+  .about { padding: 72px 0; }
+  .services .container { gap: 40px; }
+  .process .container, .projects .container { gap: 36px; }
+  .about-grid { gap: 36px; }
+  .lead { font-size: 17px; }
+
+  /* Portada */
+  .hero-grid { gap: 40px; }
+  .hero-copy { gap: 22px; }
+  .badge { font-size: 12px; }
+  .hero-actions { flex-direction: column; align-items: stretch; gap: 8px; }
+  .hero-actions .btn-link { align-self: center; border-bottom: 0; text-decoration: underline; text-decoration-color: var(--blue); text-decoration-thickness: 2px; text-underline-offset: 8px; }
+  .hero-visual { height: auto; display: flex; flex-direction: column; }
+  .browser { display: none; }
+  .flow-card, .terminal { position: relative; inset: auto; animation: none; }
+  .flow-card { width: 100%; }
+  .terminal { width: 82%; align-self: flex-end; margin-top: -20px; }
+  .tech { margin-top: 56px; }
+  .tech-label { font-size: 12px; letter-spacing: 0.1em; }
+  .tech-list { font-size: 18px; gap: 40px; padding-right: 40px; }
+
+  /* Servicios */
+  .services-band { height: 82%; clip-path: polygon(0 6%, 100% 0, 100% 100%, 0 100%); }
+  .card { min-height: 0; padding: 26px 22px; gap: 12px; }
+  .card h3 { font-size: 20px; }
+
+  /* Nosotros */
+  .about-media { aspect-ratio: 4 / 3; flex-basis: auto; width: 100%; }
+  .about-copy { flex-basis: auto; gap: 20px; }
+  .about-copy h2 { font-size: 30px; }
+  .about-copy .btn-whatsapp { align-self: stretch; }
+
+  /* Proceso */
+  .step { padding: 22px; gap: 10px; }
+  .step-n { font-size: 36px; }
+
+  /* Proyectos */
+  .project-media { aspect-ratio: 16 / 10; }
+  .project-body { padding: 20px; }
+
+  /* Contacto */
+  .contact-box { padding: 28px 20px; gap: 32px; border-radius: 24px; }
+  .form { padding: 20px; flex-basis: auto; }
+  .contact-copy { flex-basis: auto; }
+  .contact-links a { word-break: break-word; }
+
+  /* Footer */
+  .footer-cols { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 28px 24px; width: 100%; }
+
+  .wa-float { right: 16px; bottom: 16px; width: 54px; height: 54px; border-radius: 16px; }
 }
 
 @media (prefers-reduced-motion: reduce) {
