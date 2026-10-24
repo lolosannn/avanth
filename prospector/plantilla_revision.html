@@ -1,0 +1,198 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Prospectos · __TITULO__</title>
+<style>
+  :root {
+    --bg: #f6f6f4; --card: #ffffff; --text: #1b1b1b; --muted: #6b6b6b; --line: #e3e3df;
+    --accent: #1f6f5c; --accent-text: #ffffff; --warn: #b4501c; --hot: #c0362c; --ok: #2e7d4f;
+  }
+  @media (prefers-color-scheme: dark) {
+    :root { --bg: #121212; --card: #1c1c1c; --text: #ececec; --muted: #9a9a9a; --line: #2e2e2e;
+            --accent: #3fae8f; --accent-text: #0d0d0d; --warn: #e08a52; --hot: #ef6b5f; --ok: #5cc28a; }
+  }
+  * { box-sizing: border-box; }
+  body { margin: 0; background: var(--bg); color: var(--text); font: 15px/1.45 system-ui, -apple-system, "Segoe UI", sans-serif; }
+  header { position: sticky; top: 0; z-index: 2; background: var(--bg); border-bottom: 1px solid var(--line); padding: 14px 16px; }
+  h1 { font-size: 18px; margin: 0 0 4px; }
+  .sub { color: var(--muted); font-size: 13px; }
+  .barra { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 10px; align-items: center; }
+  select, input[type=search], input[type=tel] { font: inherit; padding: 6px 8px; border: 1px solid var(--line); border-radius: 8px; background: var(--card); color: var(--text); }
+  input[type=search] { flex: 1; min-width: 160px; }
+  .contador { margin-left: auto; font-size: 13px; padding: 4px 10px; border-radius: 99px; background: var(--card); border: 1px solid var(--line); }
+  .contador.pasado { color: var(--warn); border-color: var(--warn); }
+  main { max-width: 860px; margin: 0 auto; padding: 16px; display: grid; gap: 12px; }
+  .card { background: var(--card); border: 1px solid var(--line); border-radius: 12px; padding: 14px; }
+  .card.enviado { opacity: .55; } .card.descartado { opacity: .4; }
+  .top { display: flex; gap: 8px; align-items: baseline; flex-wrap: wrap; }
+  .nombre { font-weight: 650; font-size: 16px; }
+  .badge { font-size: 12px; padding: 2px 8px; border-radius: 99px; border: 1px solid currentColor; }
+  .sin_web, .web_caida { color: var(--hot); } .web_mejorable { color: var(--warn); } .web_ok { color: var(--ok); }
+  .puntaje { margin-left: auto; color: var(--muted); font-size: 13px; }
+  ul { margin: 8px 0; padding-left: 18px; color: var(--muted); font-size: 14px; }
+  .links { display: flex; gap: 12px; flex-wrap: wrap; font-size: 13px; margin: 6px 0 10px; }
+  .links a { color: var(--accent); }
+  textarea { width: 100%; min-height: 110px; font: inherit; padding: 8px; border: 1px solid var(--line); border-radius: 8px; background: var(--bg); color: var(--text); resize: vertical; }
+  .acciones { display: flex; gap: 8px; flex-wrap: wrap; margin-top: 8px; align-items: center; }
+  button { font: inherit; font-size: 14px; padding: 7px 12px; border-radius: 8px; border: 1px solid var(--line); background: var(--card); color: var(--text); cursor: pointer; }
+  button.primario { background: var(--accent); color: var(--accent-text); border-color: var(--accent); }
+  button:disabled { opacity: .45; cursor: not-allowed; }
+  .estado { font-size: 13px; color: var(--muted); }
+  .tel { width: 150px; }
+  .vacio { text-align: center; color: var(--muted); padding: 40px 0; }
+</style>
+</head>
+<body>
+<header>
+  <h1 id="titulo"></h1>
+  <div class="sub" id="resumen"></div>
+  <div class="barra">
+    <select id="fSituacion">
+      <option value="">Todas las situaciones</option>
+      <option value="sin_web">Sin web</option>
+      <option value="web_caida">Web caída</option>
+      <option value="web_mejorable">Web mejorable</option>
+      <option value="web_ok">Web bien</option>
+    </select>
+    <select id="fEstado">
+      <option value="activos">Pendientes y elegidos</option>
+      <option value="elegido">Solo elegidos</option>
+      <option value="enviado">Enviados</option>
+      <option value="descartado">Descartados</option>
+      <option value="">Todos</option>
+    </select>
+    <input type="search" id="fTexto" placeholder="Buscar por nombre o dirección">
+    <button id="exportar">Descargar CSV</button>
+    <span class="contador" id="contador"></span>
+  </div>
+</header>
+<main id="lista"></main>
+
+<script>
+const DATOS = __DATOS__;
+const ETIQUETAS = { sin_web: "Sin web", web_caida: "Web caída", web_mejorable: "Web mejorable", web_ok: "Web bien" };
+const hoy = new Date().toISOString().slice(0, 10);
+
+// El estado se guarda en este navegador, así lo que elegiste o mandaste se recuerda entre búsquedas.
+function leer(clave, def) { try { const v = localStorage.getItem("avanth:" + clave); return v ? JSON.parse(v) : def; } catch { return def; } }
+function guardar(clave, valor) { try { localStorage.setItem("avanth:" + clave, JSON.stringify(valor)); } catch {} }
+const estadoDe = p => leer("p:" + p.id, {});
+const actualizar = (p, cambios) => guardar("p:" + p.id, Object.assign(estadoDe(p), cambios));
+const enviadosHoy = () => leer("enviados:" + hoy, 0);
+
+function el(tag, attrs = {}, ...hijos) {
+  const e = document.createElement(tag);
+  for (const [k, v] of Object.entries(attrs)) {
+    if (k.startsWith("on")) e.addEventListener(k.slice(2), v); else if (v !== false && v != null) e.setAttribute(k, v === true ? "" : v);
+  }
+  for (const h of hijos) if (h != null) e.append(h);
+  return e;
+}
+
+function pintarContador() {
+  const n = enviadosHoy(), c = document.getElementById("contador");
+  c.textContent = `Enviados hoy: ${n} de ${DATOS.limite} recomendados`;
+  c.classList.toggle("pasado", n >= DATOS.limite);
+}
+
+function tarjeta(p) {
+  const st = estadoDe(p);
+  const estado = st.estado || "pendiente";
+  const mensaje = st.mensaje ?? p.mensaje;
+  const wa = st.whatsapp ?? p.whatsapp;
+
+  const texto = el("textarea", { oninput: e => actualizar(p, { mensaje: e.target.value }) });
+  texto.value = mensaje;
+  const tel = el("input", { type: "tel", class: "tel", placeholder: "549 + área + número", value: wa,
+    oninput: e => { actualizar(p, { whatsapp: e.target.value.replace(/\D/g, "") }); botonWa.disabled = !e.target.value.replace(/\D/g, ""); } });
+
+  const botonWa = el("button", { class: "primario", disabled: !wa, title: "Abre WhatsApp con el mensaje cargado. Lo mandás vos.",
+    onclick: () => {
+      const numero = tel.value.replace(/\D/g, "");
+      if (enviadosHoy() >= DATOS.limite && !confirm(`Ya mandaste ${enviadosHoy()} hoy. Pasarte del límite aumenta el riesgo de que WhatsApp te bloquee. ¿Seguir igual?`)) return;
+      window.open(`https://wa.me/${numero}?text=${encodeURIComponent(texto.value)}`, "_blank");
+      marcarEnviado("WhatsApp");
+    } }, "Abrir en WhatsApp");
+
+  function marcarEnviado(canal) {
+    if (estadoDe(p).estado !== "enviado") guardar("enviados:" + hoy, enviadosHoy() + 1);
+    actualizar(p, { estado: "enviado", canal, fecha: hoy });
+    pintarContador(); pintar();
+  }
+
+  const links = [];
+  if (p.web) links.push(el("a", { href: p.web, target: "_blank" }, "Ver web"));
+  if (p.mapa) links.push(el("a", { href: p.mapa, target: "_blank" }, "Ver en el mapa"));
+  if (p.instagram) links.push(el("a", { href: p.instagram.startsWith("http") ? p.instagram : "https://instagram.com/" + p.instagram.replace("@", ""), target: "_blank" }, "Instagram"));
+  if (p.facebook) links.push(el("a", { href: p.facebook.startsWith("http") ? p.facebook : "https://facebook.com/" + p.facebook, target: "_blank" }, "Facebook"));
+  if (p.email) links.push(el("a", { href: `mailto:${p.email}?subject=${encodeURIComponent("Página web para " + p.nombre)}&body=${encodeURIComponent(texto.value)}` }, p.email));
+  if (p.telefono) links.push(el("span", {}, "Tel: " + p.telefono));
+  if (p.rating) links.push(el("span", {}, `★ ${p.rating} (${p.resenas || 0})`));
+
+  const info = estado === "enviado" ? `Enviado por ${st.canal || "?"} el ${st.fecha || "?"}` : estado === "elegido" ? "Elegido" : estado === "descartado" ? "Descartado" : "";
+
+  return el("article", { class: "card " + estado },
+    el("div", { class: "top" },
+      el("span", { class: "nombre" }, p.nombre),
+      el("span", { class: "badge " + p.situacion }, ETIQUETAS[p.situacion]),
+      el("span", { class: "puntaje" }, `Prioridad ${p.puntaje}`)),
+    p.direccion ? el("div", { class: "sub" }, p.direccion) : null,
+    el("ul", {}, ...p.problemas.map(x => el("li", {}, x))),
+    el("div", { class: "links" }, ...links),
+    texto,
+    el("div", { class: "acciones" },
+      tel, botonWa,
+      el("button", { title: "Para pegarlo en un mensaje de Instagram o Facebook", onclick: async () => {
+        try { await navigator.clipboard.writeText(texto.value); } catch { texto.select(); document.execCommand("copy"); }
+        if (confirm("Mensaje copiado. ¿Lo marco como enviado cuando lo mandes por Instagram?")) marcarEnviado("Instagram");
+      } }, "Copiar mensaje"),
+      el("button", { onclick: () => { actualizar(p, { estado: estado === "elegido" ? "pendiente" : "elegido" }); pintar(); } }, estado === "elegido" ? "Quitar de elegidos" : "Elegir"),
+      el("button", { onclick: () => { actualizar(p, { estado: estado === "descartado" ? "pendiente" : "descartado" }); pintar(); } }, estado === "descartado" ? "Recuperar" : "Descartar"),
+      el("span", { class: "estado" }, info)));
+}
+
+function filtrados() {
+  const s = document.getElementById("fSituacion").value;
+  const e = document.getElementById("fEstado").value;
+  const t = document.getElementById("fTexto").value.toLowerCase();
+  return DATOS.prospectos.filter(p => {
+    const est = estadoDe(p).estado || "pendiente";
+    if (s && p.situacion !== s) return false;
+    if (e === "activos" && (est === "enviado" || est === "descartado")) return false;
+    if (e && e !== "activos" && est !== e) return false;
+    if (t && !(p.nombre + " " + p.direccion).toLowerCase().includes(t)) return false;
+    return true;
+  });
+}
+
+function pintar() {
+  const lista = document.getElementById("lista");
+  const items = filtrados();
+  lista.replaceChildren(...(items.length ? items.map(tarjeta) : [el("p", { class: "vacio" }, "No hay prospectos con estos filtros.")]));
+}
+
+function exportarCSV() {
+  const cols = ["nombre", "situacion", "puntaje", "telefono", "whatsapp", "email", "instagram", "web", "direccion", "estado", "mensaje"];
+  const esc = v => `"${String(v ?? "").replace(/"/g, '""')}"`;
+  const filas = DATOS.prospectos.map(p => {
+    const st = estadoDe(p);
+    const fila = Object.assign({}, p, { estado: st.estado || "pendiente", mensaje: st.mensaje ?? p.mensaje, whatsapp: st.whatsapp ?? p.whatsapp });
+    return cols.map(c => esc(fila[c])).join(",");
+  });
+  const blob = new Blob(["﻿" + [cols.join(","), ...filas].join("\n")], { type: "text/csv" });
+  const a = el("a", { href: URL.createObjectURL(blob), download: `prospectos-${DATOS.rubro}-${DATOS.fecha}.csv` });
+  document.body.append(a); a.click(); a.remove();
+}
+
+document.getElementById("titulo").textContent = `${DATOS.rubro} en ${DATOS.ciudad}`;
+const c = s => DATOS.prospectos.filter(p => p.situacion === s).length;
+document.getElementById("resumen").textContent =
+  `${DATOS.prospectos.length} prospectos del ${DATOS.fecha}: ${c("sin_web")} sin web, ${c("web_caida")} con la web caída, ${c("web_mejorable")} con web mejorable. Nada se manda solo: cada botón abre la app para que lo mandes vos.`;
+for (const id of ["fSituacion", "fEstado", "fTexto"]) document.getElementById(id).addEventListener("input", pintar);
+document.getElementById("exportar").addEventListener("click", exportarCSV);
+pintarContador(); pintar();
+</script>
+</body>
+</html>
