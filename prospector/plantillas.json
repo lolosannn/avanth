@@ -1,0 +1,24 @@
+{
+  "_ayuda": "Una lista de variantes por situación. El bot elige una al azar para cada negocio, así no salen todos los mensajes iguales. Podés usar {nombre}, {rubro}, {problema}, {tu_nombre}, {agencia} y {web_agencia}.",
+
+  "sin_web": [
+    "Hola, ¿qué tal? Soy {tu_nombre}, de {agencia}. Estuve viendo {nombre} y no encontré una página web. Hoy mucha gente busca {rubro} en Google antes de ir, y una web simple con tus servicios, ubicación y un botón de WhatsApp ayuda bastante a que te elijan. Si te interesa, te paso un par de ejemplos sin compromiso.",
+    "Hola, buen día. Me llamo {tu_nombre} y hago páginas web para negocios de la zona ({web_agencia}). Vi que {nombre} no tiene web propia todavía. ¿Te gustaría que te muestre cómo podría quedar una? Sin compromiso.",
+    "¡Hola! Soy {tu_nombre}. Buscando {rubro} en la zona di con {nombre} y noté que no tiene página web. Armo webs rápidas y pensadas para el celular, con turnos o contacto directo por WhatsApp. Si querés te cuento cómo sería, sin compromiso."
+  ],
+
+  "web_caida": [
+    "Hola, ¿qué tal? Soy {tu_nombre}, de {agencia}. Quise entrar a la web de {nombre} y no me cargó ({problema}). Te aviso por si no lo sabían, porque los clientes que la buscan se van. Si necesitás una mano para arreglarla o rehacerla, contá conmigo.",
+    "Hola, buen día. Te escribo porque intenté abrir la página de {nombre} y no funciona ({problema}). Me dedico a hacer y mantener webs ({web_agencia}). Si querés lo vemos, sin compromiso."
+  ],
+
+  "web_mejorable": [
+    "Hola, ¿qué tal? Soy {tu_nombre}, de {agencia}. Estuve viendo la web de {nombre} y noté algunas cosas que se pueden mejorar: {problema}. Son detalles que hacen que la gente se quede o se vaya. Si querés te armo una propuesta de cómo podría quedar, sin compromiso.",
+    "Hola, buen día. Me llamo {tu_nombre} y trabajo haciendo páginas web ({web_agencia}). Entré a la web de {nombre} y vi que {problema}. ¿Te interesaría que te muestre una versión renovada? Sin compromiso.",
+    "¡Hola! Soy {tu_nombre}. Pasé por la web de {nombre} y te dejo una observación: {problema}. Si en algún momento quieren renovarla, me encantaría mostrarles algunas ideas."
+  ],
+
+  "web_ok": [
+    "Hola, ¿qué tal? Soy {tu_nombre}, de {agencia}. Vi la web de {nombre}, ¡está bien armada! Además de webs, hago automatizaciones: turnos online, respuestas automáticas por WhatsApp, recordatorios a clientes. Si en algún momento les sirve algo así, avisame y lo charlamos."
+  ]
+}
