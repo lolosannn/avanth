@@ -9,7 +9,11 @@ const CONFIG = {
     linkedin: '',
     github: ''
   },
-  // Reels de Instagram que se muestran en la sección "Instagram".
+  // Reels automáticos: link del feed JSON de Behold (behold.so → conectar Instagram → JSON feed).
+  // Con el feed configurado, los reels nuevos aparecen solos en la página.
+  instagramFeed: '',
+  instagramMaxReels: 8,
+  // Reels manuales (se usan si no hay feed o si el feed falla).
   // Pegá el link de cada reel (Instagram → reel → ··· → Copiar enlace), el más nuevo primero.
   instagramReels: [
     // 'https://www.instagram.com/reel/XXXXXXXXXXX/',
@@ -50,14 +54,19 @@ document.querySelectorAll('[data-social]').forEach((a) => {
 
 // Reels de Instagram: usa el embed oficial de Instagram
 const reelGrid = document.getElementById('reel-grid');
-const reelUrls = CONFIG.instagramReels
-  .map((url) => url.trim().split('?')[0].replace(/\/?$/, '/'))
-  .filter((url) => /^https:\/\/(www\.)?instagram\.com\/(reel|reels|p)\/[\w-]+\/$/.test(url));
+const cleanReelUrl = (url) => url.trim().split('?')[0].replace(/\/?$/, '/');
+const isReelUrl = (url) => /^https:\/\/(www\.)?instagram\.com\/(reel|reels|p)\/[\w-]+\/$/.test(url);
 
-if (reelUrls.length) {
-  reelUrls.forEach((url) => {
+function renderReels(urls) {
+  reelGrid.textContent = '';
+  if (!urls.length) {
+    reelGrid.innerHTML = `<div class="reel-empty">Mirá todos nuestros reels en
+      <a href="${CONFIG.social.instagram}" target="_blank" rel="noopener">@avanth.studio</a></div>`;
+    return;
+  }
+  urls.forEach((url) => {
     const reel = document.createElement('div');
-    reel.className = 'reel reveal';
+    reel.className = 'reel';
     const embed = document.createElement('blockquote');
     embed.className = 'instagram-media';
     embed.dataset.instgrmPermalink = url;
@@ -71,13 +80,35 @@ if (reelUrls.length) {
     reel.append(embed);
     reelGrid.append(reel);
   });
-  const igScript = document.createElement('script');
-  igScript.src = 'https://www.instagram.com/embed.js';
-  igScript.async = true;
-  document.body.append(igScript);
+  if (window.instgrm) {
+    window.instgrm.Embeds.process();
+  } else {
+    const igScript = document.createElement('script');
+    igScript.src = 'https://www.instagram.com/embed.js';
+    igScript.async = true;
+    document.body.append(igScript);
+  }
+}
+
+const manualReels = CONFIG.instagramReels.map(cleanReelUrl).filter(isReelUrl);
+
+async function loadFeedReels() {
+  const res = await fetch(CONFIG.instagramFeed);
+  if (!res.ok) throw new Error(`Feed de Instagram: ${res.status}`);
+  const data = await res.json();
+  const posts = Array.isArray(data) ? data : data.posts || [];
+  return posts
+    .filter((post) => post.mediaType === 'VIDEO' || /\/reels?\//.test(post.permalink || ''))
+    .map((post) => cleanReelUrl(post.permalink || ''))
+    .filter(isReelUrl);
+}
+
+if (CONFIG.instagramFeed) {
+  loadFeedReels()
+    .then((urls) => renderReels((urls.length ? urls : manualReels).slice(0, CONFIG.instagramMaxReels)))
+    .catch(() => renderReels(manualReels.slice(0, CONFIG.instagramMaxReels)));
 } else {
-  reelGrid.innerHTML = `<div class="reel-empty">Mirá todos nuestros reels en
-    <a href="${CONFIG.social.instagram}" target="_blank" rel="noopener">@avanth.studio</a></div>`;
+  renderReels(manualReels.slice(0, CONFIG.instagramMaxReels));
 }
 
 // Menú mobile
