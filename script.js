@@ -242,6 +242,83 @@ if (swap && !reduceMotion) {
   })();
 }
 
+// Portada: el navegador muestra proyectos reales y el flujo de un lead se anima en loop
+const heroVisual = document.querySelector('.hero-visual');
+
+if (heroVisual && getComputedStyle(heroVisual).display !== 'none') {
+  const screens = [...heroVisual.querySelectorAll('.browser-screen')];
+  const urlText = heroVisual.querySelector('.browser-url-text');
+  const lead = heroVisual.querySelector('.flow-lead');
+  const steps = heroVisual.querySelectorAll('.flow-step');
+  const flowLinks = heroVisual.querySelectorAll('.flow-link');
+  const termCmd = heroVisual.querySelector('.term-cmd');
+  const termLines = heroVisual.querySelectorAll('.term-line');
+  const notif = heroVisual.querySelector('.notif');
+  const wait = (ms) => new Promise((r) => setTimeout(r, ms));
+  let screenIndex = 0;
+
+  const showScreen = (i) => {
+    screens.forEach((v, j) => {
+      v.classList.toggle('active', j === i);
+      if (j === i) { v.currentTime = 0; v.play().catch(() => {}); } else { v.pause(); }
+    });
+    urlText.style.opacity = 0;
+    setTimeout(() => { urlText.textContent = screens[i].dataset.url; urlText.style.opacity = 1; }, 300);
+  };
+
+  const finalState = () => {
+    lead.classList.add('on');
+    steps.forEach((s) => s.classList.add('done'));
+    flowLinks.forEach((l) => l.classList.add('on'));
+    termCmd.textContent = 'deploy --prod';
+    termLines.forEach((l) => l.classList.add('on'));
+    notif.classList.add('on');
+  };
+
+  if (reduceMotion) {
+    finalState();
+  } else {
+    showScreen(0);
+    (async function heroLoop() {
+      for (;;) {
+        lead.classList.remove('on');
+        notif.classList.remove('on');
+        steps.forEach((s) => s.classList.remove('active', 'done'));
+        flowLinks.forEach((l) => l.classList.remove('on'));
+        termCmd.textContent = '';
+        termLines.forEach((l) => l.classList.remove('on'));
+        await wait(600);
+
+        lead.classList.add('on');                       // llega un lead nuevo
+        for (const ch of 'deploy --prod') { termCmd.textContent += ch; await wait(55); }
+        for (let i = 0; i < steps.length; i++) {        // recorre el flujo paso a paso
+          steps[i].classList.add('active');
+          await wait(800);
+          steps[i].classList.replace('active', 'done');
+          termLines[i]?.classList.add('on');
+          if (flowLinks[i]) { flowLinks[i].classList.add('on'); await wait(500); }
+        }
+        notif.classList.add('on');                      // respuesta enviada
+        await wait(3800);
+
+        screenIndex = (screenIndex + 1) % screens.length;
+        showScreen(screenIndex);
+      }
+    })();
+
+    // Las tarjetas siguen un poco al mouse
+    const layers = heroVisual.querySelectorAll('.hv-layer');
+    document.querySelector('.hero').addEventListener('pointermove', (e) => {
+      const x = e.clientX / window.innerWidth - 0.5;
+      const y = e.clientY / window.innerHeight - 0.5;
+      layers.forEach((l) => {
+        const d = Number(l.dataset.depth);
+        l.style.transform = `translate(${-x * d}px, ${-y * d}px)`;
+      });
+    });
+  }
+}
+
 // Animación al hacer scroll
 const revealEls = document.querySelectorAll('.reveal, .card.slide');
 
