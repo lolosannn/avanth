@@ -61,32 +61,57 @@ document.querySelectorAll('[data-social]').forEach((a) => {
 });
 
 // Reels de Instagram: usa el embed oficial de Instagram
-const reelGrid = document.getElementById('reel-grid');
+const reelRows = document.getElementById('reel-rows');
 const cleanReelUrl = (url) => url.trim().split('?')[0].replace(/\/?$/, '/');
 const isReelUrl = (url) => /^https:\/\/(www\.)?instagram\.com\/(reel|reels|p)\/[\w-]+\/$/.test(url);
 
+function makeReel(url) {
+  const reel = document.createElement('div');
+  reel.className = 'reel';
+  const embed = document.createElement('blockquote');
+  embed.className = 'instagram-media';
+  embed.dataset.instgrmPermalink = url;
+  embed.dataset.instgrmVersion = '14';
+  const link = document.createElement('a');
+  link.href = url;
+  link.target = '_blank';
+  link.rel = 'noopener';
+  link.textContent = 'Ver este reel en Instagram';
+  embed.append(link);
+  reel.append(embed);
+  return reel;
+}
+
+// Dos filas que corren en sentidos opuestos; cada fila se duplica para que el loop no tenga cortes
 function renderReels(urls) {
-  reelGrid.textContent = '';
+  reelRows.textContent = '';
   if (!urls.length) {
-    reelGrid.innerHTML = `<div class="reel-empty">Mirá todos nuestros reels en
-      <a href="${CONFIG.social.instagram}" target="_blank" rel="noopener">@avanth.studio</a></div>`;
+    reelRows.innerHTML = `<div class="container"><div class="reel-empty">Mirá todos nuestros reels en
+      <a href="${CONFIG.social.instagram}" target="_blank" rel="noopener">@avanth.studio</a></div></div>`;
     return;
   }
-  urls.forEach((url) => {
-    const reel = document.createElement('div');
-    reel.className = 'reel';
-    const embed = document.createElement('blockquote');
-    embed.className = 'instagram-media';
-    embed.dataset.instgrmPermalink = url;
-    embed.dataset.instgrmVersion = '14';
-    const link = document.createElement('a');
-    link.href = url;
-    link.target = '_blank';
-    link.rel = 'noopener';
-    link.textContent = 'Ver este reel en Instagram';
-    embed.append(link);
-    reel.append(embed);
-    reelGrid.append(reel);
+  const rows = urls.length >= 4
+    ? [urls.filter((_, i) => i % 2 === 0), urls.filter((_, i) => i % 2 === 1)]
+    : [urls];
+  rows.forEach((rowUrls, r) => {
+    // Con pocos reels se repiten, así la fila siempre es más ancha que la pantalla
+    let items = rowUrls;
+    while (items.length < 5) items = items.concat(rowUrls);
+
+    const row = document.createElement('div');
+    row.className = r % 2 ? 'reel-row reverse' : 'reel-row';
+    const track = document.createElement('div');
+    track.className = 'reel-track';
+    track.style.setProperty('--reel-duration', `${items.length * 9}s`);
+    [false, true].forEach((clone) => {
+      const group = document.createElement('div');
+      group.className = 'reel-group';
+      if (clone) group.setAttribute('aria-hidden', 'true');
+      items.forEach((url) => group.append(makeReel(url)));
+      track.append(group);
+    });
+    row.append(track);
+    reelRows.append(row);
   });
   if (window.instgrm) {
     window.instgrm.Embeds.process();
