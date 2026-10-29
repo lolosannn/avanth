@@ -488,10 +488,15 @@ html:has(.video-modal[open]) { overflow: hidden; }
   .nav-links.open { display: flex; }
   .nav-links a { display: block; padding: 14px 0; font-size: 17px; border-bottom: 1px solid var(--line); }
   .nav .btn-blue { display: none; }
-  /* Hero en mobile: solo texto, botones y tecnologías, entrando completo en la pantalla */
-  .hero { min-height: calc(100svh - 72px); display: flex; padding: 40px 0 32px; }
-  .hero > .container { width: 100%; display: flex; flex-direction: column; justify-content: center; gap: 56px; }
-  .hero-visual { display: none; }
+  /* Hero en mobile: texto y botones, y debajo una versión compacta del gráfico animado */
+  .hero { padding: 40px 0 32px; }
+  .hero > .container { width: 100%; display: flex; flex-direction: column; gap: 48px; }
+  .hero-grid { gap: 40px; }
+  .hero-visual { flex-basis: auto; width: 100%; max-width: 520px; height: 440px; margin: 0 auto; }
+  .browser { width: 92%; height: 250px; }
+  .flow-card { right: -6px; top: 100px; scale: .8; transform-origin: top right; }
+  .terminal { display: none; }
+  .notif { left: -4px; bottom: 0; width: 260px; scale: .92; transform-origin: bottom left; }
   .tech { margin-top: 0; }
 }
 
