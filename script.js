@@ -9,6 +9,8 @@ const CONFIG = {
     linkedin: '',
     github: ''
   },
+  // Estadísticas del panel admin (admin.html): se configuran en analytics-config.js
+  analytics: window.AVANTH_ANALYTICS || {},
   // Reels automáticos: link del feed JSON de Behold (behold.so → conectar Instagram → JSON feed).
   // Con el feed configurado, los reels nuevos aparecen solos en la página.
   instagramFeed: '',
@@ -35,6 +37,7 @@ const waUrl = CONFIG.whatsapp
 
 document.querySelectorAll('[data-whatsapp]').forEach((a) => {
   a.href = waUrl;
+  a.dataset.track = 'WhatsApp';
   if (CONFIG.whatsapp) {
     a.target = '_blank';
     a.rel = 'noopener';
@@ -45,6 +48,7 @@ document.querySelectorAll('[data-whatsapp-text]').forEach((el) => {
 });
 
 document.querySelectorAll('[data-email]').forEach((a) => {
+  a.dataset.track = 'Email';
   a.href = CONFIG.email ? `mailto:${CONFIG.email}` : '#contacto';
 });
 document.querySelectorAll('[data-email-text]').forEach((el) => {
@@ -402,3 +406,70 @@ videoModal.addEventListener('close', () => {
 });
 
 document.getElementById('year').textContent = new Date().getFullYear();
+
+// Estadísticas: registra visitas, secciones vistas y clics para el panel admin
+(function analytics() {
+  const { supabaseUrl, supabaseKey } = CONFIG.analytics;
+  if (!supabaseUrl || !supabaseKey || location.protocol === 'file:') return;
+  let noTrack = false;
+  let visitor = '';
+  try {
+    noTrack = localStorage.getItem('avanth-no-track') === '1';   // el panel lo activa en tu navegador
+    visitor = localStorage.getItem('avanth-visitor') || '';
+    if (!visitor) {
+      visitor = Math.random().toString(36).slice(2) + Date.now().toString(36);
+      localStorage.setItem('avanth-visitor', visitor);
+    }
+  } catch { /* sin localStorage se cuenta igual */ }
+  if (noTrack) return;
+
+  const device = window.matchMedia('(max-width: 880px)').matches ? 'mobile' : 'desktop';
+  const referrer = (() => {
+    try {
+      const host = new URL(document.referrer).hostname.replace(/^www\./, '');
+      return host === location.hostname.replace(/^www\./, '') ? '' : host;
+    } catch { return ''; }
+  })();
+
+  const track = (type, extra = {}) => {
+    fetch(`${supabaseUrl}/rest/v1/events`, {
+      method: 'POST',
+      keepalive: true,
+      headers: {
+        apikey: supabaseKey,
+        Authorization: `Bearer ${supabaseKey}`,
+        'Content-Type': 'application/json',
+        Prefer: 'return=minimal'
+      },
+      body: JSON.stringify({ type, path: location.pathname, visitor, device, ...extra })
+    }).catch(() => {});
+  };
+
+  track('pageview', { referrer });
+
+  // Cada sección cuenta una vez por visita si queda en pantalla (40%) al menos 1 segundo,
+  // así no cuentan las que se pasan de largo con un scroll rápido
+  const sectionTimers = new Map();
+  const sectionIO = new IntersectionObserver((entries) => {
+    entries.forEach(({ target, isIntersecting }) => {
+      clearTimeout(sectionTimers.get(target));
+      if (!isIntersecting) return;
+      sectionTimers.set(target, setTimeout(() => {
+        sectionIO.unobserve(target);
+        track('section', { section: target.id });
+      }, 1000));
+    });
+  }, { threshold: 0.4 });
+  document.querySelectorAll('main section[id]').forEach((sec) => sectionIO.observe(sec));
+
+  // Clics en links, botones y videos de proyectos
+  document.addEventListener('click', (e) => {
+    const el = e.target.closest('a, button, .project-media');
+    if (!el) return;
+    const label = (el.dataset.track || el.getAttribute('aria-label') || el.textContent)
+      .replace(/\s+/g, ' ').trim().slice(0, 120);
+    const area = el.closest('section[id], header, footer');
+    const section = el.classList.contains('wa-float') ? 'flotante' : area ? area.id || area.tagName.toLowerCase() : '';
+    track('click', { label, section });
+  }, { capture: true });
+})();
