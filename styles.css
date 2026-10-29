@@ -410,12 +410,21 @@ html:has(.video-modal[open]) { overflow: hidden; }
 .reveal.visible { opacity: 1; transform: none; }
 
 /* Instagram */
-.instagram { padding: 112px 0; border-top: 1px solid rgba(255, 255, 255, 0.06); }
+.instagram { padding: 112px 0; border-top: 1px solid rgba(255, 255, 255, 0.06); display: flex; flex-direction: column; gap: 48px; }
 .instagram .container { display: flex; flex-direction: column; gap: 48px; }
 .ig-follow { min-height: 48px; padding: 0 22px; font-size: 15px; }
 .ig-follow svg { width: 20px; height: 20px; }
-.reel-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 24px; align-items: start; }
-.reel { min-width: 0; border-radius: var(--radius); overflow: hidden; background: #fff; }
+.reel-rows { display: flex; flex-direction: column; gap: 24px; }
+.reel-row {
+  overflow: hidden;
+  -webkit-mask-image: linear-gradient(90deg, transparent, #000 6%, #000 94%, transparent);
+  mask-image: linear-gradient(90deg, transparent, #000 6%, #000 94%, transparent);
+}
+.reel-track { display: flex; width: max-content; animation: marquee var(--reel-duration, 60s) linear infinite; }
+.reel-row.reverse .reel-track { animation-direction: reverse; }
+.reel-row:hover .reel-track, .reel-row:focus-within .reel-track { animation-play-state: paused; }
+.reel-group { display: flex; flex: none; align-items: flex-start; gap: 24px; padding-right: 24px; }
+.reel { flex: none; width: 320px; border-radius: var(--radius); overflow: hidden; background: #fff; }
 .reel .instagram-media { margin: 0 !important; min-width: 0 !important; width: 100% !important; max-width: none !important; border: 0 !important; border-radius: 0 !important; box-shadow: none !important; }
 .reel-empty {
   grid-column: 1 / -1; display: flex; flex-direction: column; align-items: center; gap: 14px; text-align: center;
@@ -491,7 +500,11 @@ html:has(.video-modal[open]) { overflow: hidden; }
   .project-body { padding: 20px; }
 
   /* Instagram */
+  .instagram { gap: 36px; }
   .ig-follow { width: 100%; }
+  .reel-rows, .reel-group { gap: 16px; }
+  .reel-group { padding-right: 16px; }
+  .reel { width: 260px; }
 
   /* Contacto */
   .contact-box { gap: 40px; }
@@ -515,4 +528,6 @@ html:has(.video-modal[open]) { overflow: hidden; }
   .marquee-track { width: auto; justify-content: center; }
   .marquee-track .tech-list { flex-wrap: wrap; justify-content: center; gap: 16px 40px; padding: 0; }
   .marquee-track .tech-list[aria-hidden] { display: none; }
+  .reel-row { overflow-x: auto; -webkit-mask-image: none; mask-image: none; }
+  .reel-group[aria-hidden] { display: none; }
 }
