@@ -12,11 +12,19 @@ const CONFIG = {
   // Reels automáticos: link del feed JSON de Behold (behold.so → conectar Instagram → JSON feed).
   // Con el feed configurado, los reels nuevos aparecen solos en la página.
   instagramFeed: '',
-  instagramMaxReels: 8,
+  instagramMaxReels: 12,
   // Reels manuales (se usan si no hay feed o si el feed falla).
   // Pegá el link de cada reel (Instagram → reel → ··· → Copiar enlace), el más nuevo primero.
   instagramReels: [
-    // 'https://www.instagram.com/reel/XXXXXXXXXXX/',
+    'https://www.instagram.com/p/De2gIWYgSE-/',
+    'https://www.instagram.com/p/DfFv43_Jvxt/',
+    'https://www.instagram.com/p/DfFnDv7pjLL/',
+    'https://www.instagram.com/p/DfA7-6VJ1JX/',
+    'https://www.instagram.com/p/De-n9ucJ2j6/',
+    'https://www.instagram.com/p/De7Vl7fJjk7/',
+    'https://www.instagram.com/p/De7JRmgpWrA/',
+    'https://www.instagram.com/p/De5Qca5pcmD/',
+    'https://www.instagram.com/p/De5Cnx8Jp64/',
   ]
 };
 
