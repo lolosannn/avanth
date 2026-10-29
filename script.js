@@ -8,7 +8,12 @@ const CONFIG = {
     instagram: 'https://www.instagram.com/avanth.studio/',
     linkedin: '',
     github: ''
-  }
+  },
+  // Reels de Instagram que se muestran en la sección "Instagram".
+  // Pegá el link de cada reel (Instagram → reel → ··· → Copiar enlace), el más nuevo primero.
+  instagramReels: [
+    // 'https://www.instagram.com/reel/XXXXXXXXXXX/',
+  ]
 };
 
 // Links de contacto
@@ -42,6 +47,38 @@ document.querySelectorAll('[data-social]').forEach((a) => {
     a.remove();
   }
 });
+
+// Reels de Instagram: usa el embed oficial de Instagram
+const reelGrid = document.getElementById('reel-grid');
+const reelUrls = CONFIG.instagramReels
+  .map((url) => url.trim().split('?')[0].replace(/\/?$/, '/'))
+  .filter((url) => /^https:\/\/(www\.)?instagram\.com\/(reel|reels|p)\/[\w-]+\/$/.test(url));
+
+if (reelUrls.length) {
+  reelUrls.forEach((url) => {
+    const reel = document.createElement('div');
+    reel.className = 'reel reveal';
+    const embed = document.createElement('blockquote');
+    embed.className = 'instagram-media';
+    embed.dataset.instgrmPermalink = url;
+    embed.dataset.instgrmVersion = '14';
+    const link = document.createElement('a');
+    link.href = url;
+    link.target = '_blank';
+    link.rel = 'noopener';
+    link.textContent = 'Ver este reel en Instagram';
+    embed.append(link);
+    reel.append(embed);
+    reelGrid.append(reel);
+  });
+  const igScript = document.createElement('script');
+  igScript.src = 'https://www.instagram.com/embed.js';
+  igScript.async = true;
+  document.body.append(igScript);
+} else {
+  reelGrid.innerHTML = `<div class="reel-empty">Mirá todos nuestros reels en
+    <a href="${CONFIG.social.instagram}" target="_blank" rel="noopener">@avanth.studio</a></div>`;
+}
 
 // Menú mobile
 const toggle = document.querySelector('.nav-toggle');
