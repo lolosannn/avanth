@@ -4,7 +4,7 @@ Sitio estático de Avanth Studio: diseño web, automatización y software a medi
 
 - `index.html`: estructura de la página
 - `styles.css`: estilos (colores y tipografías en `:root`)
-- `script.js`: menú mobile, formulario y animaciones. **Completá `CONFIG` con tu email, WhatsApp y redes.**
+- `script.js`: menú mobile, formulario y animaciones. **Completá `CONFIG` con tu email, WhatsApp y redes.** Para que los reels aparezcan solos en la sección Instagram, pegá el link del feed JSON de [Behold](https://behold.so) en `CONFIG.instagramFeed` (o cargalos a mano en `CONFIG.instagramReels`).
 - `assets/logo.svg`: logo
 
 ## Publicar con GitHub Pages

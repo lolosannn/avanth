@@ -409,6 +409,21 @@ html:has(.video-modal[open]) { overflow: hidden; }
 .reveal { opacity: 0; transform: translateY(24px); transition: opacity .7s ease, transform .7s ease; }
 .reveal.visible { opacity: 1; transform: none; }
 
+/* Instagram */
+.instagram { padding: 112px 0; border-top: 1px solid rgba(255, 255, 255, 0.06); }
+.instagram .container { display: flex; flex-direction: column; gap: 48px; }
+.ig-follow { min-height: 48px; padding: 0 22px; font-size: 15px; }
+.ig-follow svg { width: 20px; height: 20px; }
+.reel-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 24px; align-items: start; }
+.reel { min-width: 0; border-radius: var(--radius); overflow: hidden; background: #fff; }
+.reel .instagram-media { margin: 0 !important; min-width: 0 !important; width: 100% !important; max-width: none !important; border: 0 !important; border-radius: 0 !important; box-shadow: none !important; }
+.reel-empty {
+  grid-column: 1 / -1; display: flex; flex-direction: column; align-items: center; gap: 14px; text-align: center;
+  padding: 56px 24px; border-radius: var(--radius); background: rgba(14, 20, 48, 0.85); border: 1px dashed var(--line);
+  color: var(--text-2); font-size: 16px;
+}
+.reel-empty a { color: var(--blue-light); font-weight: 600; text-decoration: underline; text-underline-offset: 3px; }
+
 /* Responsive */
 @media (max-width: 1360px) {
   .paper-plane { display: none; }
@@ -441,10 +456,10 @@ html:has(.video-modal[open]) { overflow: hidden; }
 
   /* Espaciado general */
   .container { padding: 0 20px; }
-  .services, .process, .projects, .contact { padding: 72px 0; }
+  .services, .process, .projects, .instagram, .contact { padding: 72px 0; }
   .about { padding: 72px 0; }
   .services .container { gap: 40px; }
-  .process .container, .projects .container { gap: 36px; }
+  .process .container, .projects .container, .instagram .container { gap: 36px; }
   .about-grid { gap: 36px; }
   .lead { font-size: 17px; }
 
@@ -474,6 +489,9 @@ html:has(.video-modal[open]) { overflow: hidden; }
   /* Proyectos */
   .project-media { aspect-ratio: 16 / 10; }
   .project-body { padding: 20px; }
+
+  /* Instagram */
+  .ig-follow { width: 100%; }
 
   /* Contacto */
   .contact-box { gap: 40px; }
