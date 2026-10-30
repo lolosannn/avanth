@@ -1,3 +1,11 @@
+'use strict';
+
+// Evita que otra web muestre esta página dentro de un iframe (clickjacking)
+if (window.top !== window.self) {
+  try { window.top.location.replace(window.self.location.href); }
+  catch { document.documentElement.hidden = true; }
+}
+
 // Completá estos datos y se actualizan en toda la página.
 const CONFIG = {
   email: 'avanth.studio@gmail.com',
@@ -30,6 +38,15 @@ const CONFIG = {
   ]
 };
 
+// Solo se aceptan datos con formato válido, por si alguien edita CONFIG por error
+const isPhone = (v) => /^\d{8,15}$/.test(v);
+const isEmail = (v) => /^[^\s@<>"']+@[^\s@<>"']+\.[a-z]{2,}$/i.test(v);
+const isSafeUrl = (v) => {
+  try { return new URL(v).protocol === 'https:'; } catch { return false; }
+};
+if (!isPhone(CONFIG.whatsapp)) CONFIG.whatsapp = '';
+if (!isEmail(CONFIG.email)) CONFIG.email = '';
+
 // Links de contacto
 const waUrl = CONFIG.whatsapp
   ? `https://wa.me/${CONFIG.whatsapp}?text=${encodeURIComponent(CONFIG.whatsappMessage)}`
@@ -40,7 +57,7 @@ document.querySelectorAll('[data-whatsapp]').forEach((a) => {
   a.dataset.track = 'WhatsApp';
   if (CONFIG.whatsapp) {
     a.target = '_blank';
-    a.rel = 'noopener';
+    a.rel = 'noopener noreferrer';
   }
 });
 document.querySelectorAll('[data-whatsapp-text]').forEach((el) => {
@@ -57,7 +74,7 @@ document.querySelectorAll('[data-email-text]').forEach((el) => {
 
 document.querySelectorAll('[data-social]').forEach((a) => {
   const url = CONFIG.social[a.dataset.social];
-  if (url) {
+  if (url && isSafeUrl(url)) {
     a.href = url;
   } else {
     a.remove();
@@ -79,7 +96,7 @@ function makeReel(url) {
   const link = document.createElement('a');
   link.href = url;
   link.target = '_blank';
-  link.rel = 'noopener';
+  link.rel = 'noopener noreferrer';
   link.textContent = 'Ver este reel en Instagram';
   embed.append(link);
   reel.append(embed);
@@ -91,7 +108,7 @@ function renderReels(urls) {
   reelRows.textContent = '';
   if (!urls.length) {
     reelRows.innerHTML = `<div class="container"><div class="reel-empty">Mirá todos nuestros reels en
-      <a href="${CONFIG.social.instagram}" target="_blank" rel="noopener">@avanth.studio</a></div></div>`;
+      <a href="${CONFIG.social.instagram}" target="_blank" rel="noopener noreferrer">@avanth.studio</a></div></div>`;
     return;
   }
   const rows = urls.length >= 4
@@ -167,21 +184,51 @@ links.querySelectorAll('a').forEach((a) => {
 
 // Formulario: arma el mensaje y lo abre en WhatsApp o en el mail
 const form = document.getElementById('contact-form');
+const SERVICIOS = [...form.elements.servicio.options].map((o) => o.value);
+const SEND_COOLDOWN = 30000; // ms entre envíos, para frenar spam
+let lastSent = 0;
+
+// Quita caracteres de control e invisibles, espacios de más, y corta al largo máximo
+const clean = (v, max) => String(v || '')
+  .replace(/[\u0000-\u0008\u000B-\u001F\u007F-\u009F\u200B-\u200F\u202A-\u202E\u2066-\u2069]/g, '')
+  .replace(/[ \t]+$/gm, '')
+  .trim()
+  .slice(0, max);
 
 form.addEventListener('submit', (e) => {
   e.preventDefault();
   if (!form.reportValidity()) return;
 
   const data = new FormData(form);
+  // Si el campo trampa vino completo, es un bot: no se envía nada
+  if (data.get('website')) return;
+
+  const now = Date.now();
+  if (now - lastSent < SEND_COOLDOWN) {
+    alert('Ya enviaste un mensaje. Esperá unos segundos antes de volver a intentar.');
+    return;
+  }
+
+  const nombre = clean(data.get('nombre'), 80).replace(/\s+/g, ' ');
+  const email = clean(data.get('email'), 120);
+  const servicio = SERVICIOS.includes(data.get('servicio')) ? data.get('servicio') : 'Otro';
+  const mensaje = clean(data.get('mensaje'), 2000);
+
+  if (!nombre || !isEmail(email) || !mensaje) {
+    alert('Revisá los datos del formulario.');
+    return;
+  }
+  lastSent = now;
+
   const text =
-    `Hola! Soy ${data.get('nombre')} (${data.get('email')}).\n` +
-    `Me interesa: ${data.get('servicio')}.\n\n` +
-    `${data.get('mensaje')}`;
+    `Hola! Soy ${nombre} (${email}).\n` +
+    `Me interesa: ${servicio}.\n\n` +
+    `${mensaje}`;
 
   if (CONFIG.whatsapp) {
-    window.open(`https://wa.me/${CONFIG.whatsapp}?text=${encodeURIComponent(text)}`, '_blank', 'noopener');
+    window.open(`https://wa.me/${CONFIG.whatsapp}?text=${encodeURIComponent(text)}`, '_blank', 'noopener,noreferrer');
   } else if (CONFIG.email) {
-    const subject = `Consulta: ${data.get('servicio')}`;
+    const subject = `Consulta: ${servicio}`;
     window.location.href = `mailto:${CONFIG.email}?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(text)}`;
   } else {
     alert('Configurá tu email o WhatsApp en script.js para recibir mensajes.');
@@ -472,4 +519,30 @@ document.getElementById('year').textContent = new Date().getFullYear();
     const section = el.classList.contains('wa-float') ? 'flotante' : area ? area.id || area.tagName.toLowerCase() : '';
     track('click', { label, section });
   }, { capture: true });
+})();
+
+// Protección de imágenes y videos: sin clic derecho, arrastrar, descargar ni "Guardar página"
+(() => {
+  const MEDIA = 'img, video, picture, .project-media, .browser, .about-media';
+
+  document.addEventListener('contextmenu', (e) => {
+    if (e.target.closest(MEDIA)) e.preventDefault();
+  });
+  document.addEventListener('dragstart', (e) => {
+    if (e.target.closest(MEDIA)) e.preventDefault();
+  });
+  // Ctrl/Cmd + S (guardar página) y Ctrl/Cmd + U (ver código)
+  document.addEventListener('keydown', (e) => {
+    const key = e.key.toLowerCase();
+    if ((e.ctrlKey || e.metaKey) && (key === 's' || key === 'u')) e.preventDefault();
+  });
+
+  const lockVideo = (v) => {
+    v.setAttribute('controlslist', 'nodownload noplaybackrate noremoteplayback');
+    v.disablePictureInPicture = true;
+    v.disableRemotePlayback = true;
+  };
+  const lockImg = (img) => { img.draggable = false; };
+  document.querySelectorAll('video').forEach(lockVideo);
+  document.querySelectorAll('img').forEach(lockImg);
 })();

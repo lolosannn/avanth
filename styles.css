@@ -573,3 +573,14 @@ html:has(.video-modal[open]) { overflow: hidden; }
   .reel-row { overflow-x: auto; -webkit-mask-image: none; mask-image: none; }
   .reel-group[aria-hidden] { display: none; }
 }
+
+/* Protección de imágenes y videos: no se pueden arrastrar, seleccionar ni guardar con toque largo */
+img, video, .project-media, .browser, .about-media {
+  -webkit-user-select: none;
+  user-select: none;
+  -webkit-user-drag: none;
+  -webkit-touch-callout: none;
+}
+
+/* Campo trampa anti-spam del formulario */
+.hp { position: absolute; left: -10000px; width: 1px; height: 1px; overflow: hidden; }
