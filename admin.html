@@ -413,7 +413,12 @@
         form.reset();
         await load();
       } catch (err) {
-        $('login-error').textContent = err.message === 'Invalid login credentials' ? 'Email o contraseña incorrectos.' : err.message;
+        const messages = {
+          'Invalid login credentials': 'Email o contraseña incorrectos.',
+          'Email not confirmed': 'El email no está confirmado. En Supabase, confirmá el usuario (ver supabase/README.md).',
+          'Failed to fetch': 'No se pudo conectar con Supabase. Revisá tu conexión.'
+        };
+        $('login-error').textContent = messages[err.message] || err.message;
       } finally {
         btn.disabled = false;
       }

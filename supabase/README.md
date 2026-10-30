@@ -16,6 +16,13 @@ Para ver cómo queda con datos de ejemplo: `admin.html?demo`.
 
 Listo: entrá a `tusitio.com/admin.html` con tu email y contraseña.
 
+## Problemas al ingresar
+
+- **"El email no está confirmado":** el usuario se creó sin *Auto Confirm User*. En *SQL Editor*, corré:
+  `update auth.users set email_confirmed_at = now() where email = 'avanth.studio@gmail.com';`
+- **Olvidaste la contraseña:** en *SQL Editor*, corré (cambiando la contraseña):
+  `update auth.users set encrypted_password = crypt('NuevaContraseña', gen_salt('bf')) where email = 'avanth.studio@gmail.com';`
+
 ## Qué se registra
 
 - **Visitas:** cada vez que se abre la página, con el sitio de origen y si es celular o computadora.
