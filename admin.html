@@ -4,6 +4,7 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <meta name="robots" content="noindex, nofollow">
+  <meta name="referrer" content="no-referrer">
   <title>Panel · Avanth Studio</title>
   <link rel="icon" type="image/svg+xml" href="assets/logo.svg">
   <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -185,6 +186,11 @@
 
   <script src="analytics-config.js"></script>
   <script>
+    // El panel no se puede mostrar dentro de otra web (evita que roben clics o la contraseña)
+    if (window.top !== window.self) {
+      try { window.top.location.replace(window.self.location.href); }
+      catch { document.documentElement.hidden = true; }
+    }
     const { supabaseUrl = '', supabaseKey = '' } = window.AVANTH_ANALYTICS || {};
     const demo = new URLSearchParams(location.search).has('demo');
     const $ = (id) => document.getElementById(id);
