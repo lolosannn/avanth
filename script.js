@@ -311,6 +311,7 @@ if (heroVisual && getComputedStyle(heroVisual).display !== 'none') {
   const showScreen = (i) => {
     screens.forEach((v, j) => {
       v.classList.toggle('active', j === i);
+      if (v.tagName !== 'VIDEO') return; // las capturas (proyectos para probar en vivo) no se reproducen
       if (j === i) { v.currentTime = 0; v.play().catch(() => {}); } else { v.pause(); }
     });
     urlText.style.opacity = 0;

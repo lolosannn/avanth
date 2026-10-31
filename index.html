@@ -84,7 +84,7 @@
                 <div class="browser-screens">
                   <video class="browser-screen active" src="assets/proyectos/kroma-studio.mp4" poster="assets/proyectos/kroma-studio.jpg" data-url="kromastudio.com" muted loop playsinline preload="metadata"></video>
                   <video class="browser-screen" src="assets/proyectos/smash-burger.mp4" poster="assets/proyectos/smash-burger.jpg" data-url="smashburger.com.ar" muted loop playsinline preload="none"></video>
-                  <video class="browser-screen" src="assets/proyectos/xv-matilda.mp4" poster="assets/proyectos/xv-matilda.jpg" data-url="xvmatilda.com" muted loop playsinline preload="none"></video>
+                  <img class="browser-screen" src="assets/proyectos/bagley.jpg" data-url="lolosannn.github.io/bagley" alt="" loading="lazy" decoding="async">
                 </div>
               </div>
             </div>
@@ -265,9 +265,25 @@
             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" style="width:16px;height:16px"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
           </button>
         </div>
-        <!-- Solo proyectos web. Cada video va en assets/proyectos/ como:
+        <!-- Solo proyectos web. Cada video (o captura, si el proyecto se prueba en vivo) va en assets/proyectos/ como:
              <video src="assets/proyectos/nombre.mp4" poster="assets/proyectos/nombre.jpg" muted loop playsinline preload="none"></video> -->
         <div class="project-grid" id="project-grid">
+          <article class="project reveal">
+            <a class="project-media" href="https://lolosannn.github.io/bagley/" target="_blank" rel="noopener noreferrer" aria-label="Abrir la web de Bagley en una pestaña nueva">
+              <img src="assets/proyectos/bagley.jpg" alt="Inicio de la web concepto de Bagley: sello de los 160 años, logo y paquetes de Rumba, Merengadas y Mellizas" width="1200" height="750" loading="lazy" decoding="async">
+            </a>
+            <div class="project-body">
+              <span class="tag">Concepto interactivo</span>
+              <h3>Bagley · 160 años</h3>
+              <p>Una marca que está en todas las alacenas del país y no tiene web. Le hicimos una propuesta propia: la pantalla se llena de galletitas mientras bajás, cada una se parte con el scroll y la historia se cuenta en un álbum de figuritas. Entrá y probala. Proyecto de portfolio, no oficial.</p>
+              <a class="project-link" href="https://lolosannn.github.io/bagley/" target="_blank" rel="noopener noreferrer">Probala en vivo
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M7 17 17 7M8 7h9v9"/></svg>
+              </a>
+              <a class="project-link" href="https://github.com/lolosannn/bagley" target="_blank" rel="noopener noreferrer">Ver el código en GitHub
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M7 17 17 7M8 7h9v9"/></svg>
+              </a>
+            </div>
+          </article>
           <article class="project reveal">
             <div class="project-media">
               <video src="assets/proyectos/kroma-studio.mp4" poster="assets/proyectos/kroma-studio.jpg" muted loop playsinline preload="none" aria-label="Recorrido por la web de Kroma Studio"></video>
@@ -288,7 +304,7 @@
               <p>Una web con mucha personalidad para una hamburguesería de smash burgers. Muestra la carta, la historia del local y dónde encontrarlo, y suma un armador de pedidos: el cliente elige sus hamburguesas y extras, la forma de entrega y de pago, y el pedido le llega al local listo por WhatsApp.</p>
             </div>
           </article>
-          <article class="project reveal">
+          <article class="project reveal project-extra" hidden>
             <div class="project-media">
               <video src="assets/proyectos/xv-matilda.mp4" poster="assets/proyectos/xv-matilda.jpg" muted loop playsinline preload="none" aria-label="Recorrido por la invitación web de los XV de Matilda"></video>
             </div>
