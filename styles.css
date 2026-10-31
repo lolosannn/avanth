@@ -364,6 +364,7 @@ input, textarea, select, button { font: inherit; }
 .project p { font-size: 15px; line-height: 1.6; color: #4A5578; }
 .project p a { color: #2340C4; font-weight: 600; text-decoration: underline; text-underline-offset: 3px; }
 .project p a:hover { color: var(--navy); }
+.project .project-note { font-size: 13px; line-height: 1.5; color: #6B7494; }
 .project-link { display: inline-flex; align-items: center; gap: 6px; margin-top: 4px; font-size: 15px; font-weight: 600; color: #2340C4; }
 .project-link svg { width: 16px; height: 16px; transition: transform .2s ease; }
 .project-link:hover svg { transform: translate(2px, -2px); }
