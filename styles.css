@@ -251,6 +251,56 @@ input, textarea, select, button { font: inherit; }
 .card.slide.from-left { transform: translateX(-120px); }
 .card.slide.visible { opacity: 1; transform: none; }
 
+/* Rubros: bloque corto en la home + página rubros.html con acordeón */
+.rubros-teaser { padding: 112px 0; }
+.rubros-teaser .container { display: flex; flex-direction: column; align-items: center; gap: 40px; }
+.rubro-chips { display: flex; flex-wrap: wrap; justify-content: center; gap: 10px; max-width: 820px; }
+.rubro-chip {
+  padding: 10px 18px; border-radius: 999px; font-size: 15px; font-weight: 500; color: var(--text);
+  background: var(--surface); border: 1px solid var(--line); transition: border-color .2s ease, background-color .2s ease;
+}
+.rubro-chip:hover { color: #fff; background: #1A2560; border-color: rgba(143, 163, 255, 0.55); }
+
+.rubros-page { padding: 64px 0 120px; min-height: 80vh; }
+.rubros-page .container { display: flex; flex-direction: column; gap: 48px; }
+.rubros-back { align-self: flex-start; font-size: 15px; color: var(--text-2); }
+.rubro-list-page { display: flex; flex-direction: column; gap: 14px; width: 100%; max-width: 880px; margin: 0 auto; }
+.rubro-item {
+  border-radius: var(--radius); background: var(--surface); border: 1px solid var(--line);
+  transition: border-color .25s ease, background-color .25s ease; scroll-margin-top: 90px;
+}
+.rubro-item:hover, .rubro-item[open] { border-color: rgba(143, 163, 255, 0.45); }
+.rubro-item[open] { background: #111A44; }
+.rubro-item summary { display: flex; align-items: center; gap: 18px; padding: 22px 24px; cursor: pointer; list-style: none; }
+.rubro-item summary::-webkit-details-marker { display: none; }
+.rubro-item summary .card-icon { flex: none; }
+.rubro-item[open] summary .card-icon, .rubro-item summary:hover .card-icon { background: var(--blue); color: #fff; }
+.rubro-summary-text { flex: 1; min-width: 0; display: flex; flex-direction: column; gap: 4px; }
+.rubro-name { font-family: var(--font-display); font-weight: 700; font-size: 20px; line-height: 1.25; }
+.rubro-desc { font-size: 15px; line-height: 1.5; color: var(--text-2); }
+.rubro-chevron { flex: none; width: 22px; height: 22px; color: var(--blue-light); transition: transform .25s ease; }
+.rubro-item[open] .rubro-chevron { transform: rotate(180deg); }
+.rubro-body { display: flex; flex-direction: column; gap: 16px; padding: 4px 24px 28px 94px; }
+.rubro-label { font-size: 13px; letter-spacing: 0.14em; text-transform: uppercase; color: var(--blue-light); font-weight: 600; margin-top: 8px; }
+.rubro-problems { list-style: none; margin: 0; padding: 0; display: flex; flex-direction: column; gap: 10px; }
+.rubro-problems li { display: flex; gap: 10px; font-size: 15px; line-height: 1.55; color: var(--text-2); }
+.rubro-problems svg { flex: none; width: 18px; height: 18px; margin-top: 2px; color: #FF7A8A; }
+.rubro-sols { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 12px; }
+.rubro-sol { display: flex; flex-direction: column; gap: 10px; padding: 18px; border-radius: 14px; background: rgba(43, 75, 224, 0.12); border: 1px solid rgba(143, 163, 255, 0.18); }
+.rubro-sol-icon { width: 36px; height: 36px; border-radius: 10px; background: var(--blue); color: #fff; display: flex; align-items: center; justify-content: center; }
+.rubro-sol-icon svg { width: 20px; height: 20px; }
+.rubro-sol h4 { margin: 0 0 4px; font-family: var(--font-display); font-size: 16px; }
+.rubro-sol p { font-size: 14px; line-height: 1.55; color: var(--text-2); }
+.rubro-body .btn-whatsapp { align-self: flex-start; margin-top: 8px; }
+.rubros-more { text-align: center; color: var(--text-2); font-size: 16px; }
+.rubros-more a { font-weight: 600; text-decoration: underline; text-decoration-color: var(--blue); text-underline-offset: 4px; }
+@media (max-width: 760px) {
+  .rubro-sols { grid-template-columns: minmax(0, 1fr); }
+  .rubro-sol { flex-direction: row; align-items: flex-start; gap: 14px; }
+  .rubro-sol-icon { flex: none; }
+  .rubro-body { padding: 0 20px 24px; }
+}
+
 /* Avioncito de papel */
 .paper-plane {
   position: absolute; top: 96px; left: calc(50% + 606px); width: 180px; height: auto;
@@ -509,8 +559,19 @@ html:has(.video-modal[open]) { overflow: hidden; }
   /* Espaciado general */
   .container { padding: 0 20px; }
   .services, .process, .projects, .instagram, .contact { padding: 72px 0; }
-  .about { padding: 72px 0; }
+  .about, .rubros-teaser { padding: 72px 0; }
   .services .container { gap: 40px; }
+  .rubros-teaser .container { gap: 28px; }
+  .rubros-teaser .btn { align-self: stretch; }
+  .rubro-chip { font-size: 14px; padding: 8px 14px; }
+  .rubros-page { padding: 32px 0 72px; }
+  .rubros-page .container { gap: 32px; }
+  .rubro-item summary { padding: 18px 16px; gap: 14px; }
+  .rubro-item summary .card-icon { width: 44px; height: 44px; border-radius: 12px; }
+  .rubro-name { font-size: 18px; }
+  .rubro-desc { font-size: 14px; }
+  .rubro-body { padding: 0 16px 22px; }
+  .rubro-body .btn-whatsapp { align-self: stretch; }
   .process .container, .projects .container, .instagram .container { gap: 36px; }
   .about-grid { gap: 36px; }
   .lead { font-size: 17px; }

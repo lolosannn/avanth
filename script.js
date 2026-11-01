@@ -53,7 +53,11 @@ const waUrl = CONFIG.whatsapp
   : '#contacto';
 
 document.querySelectorAll('[data-whatsapp]').forEach((a) => {
-  a.href = waUrl;
+  // data-whatsapp="mensaje" arma el chat con un texto propio (ej. tarjetas de rubros)
+  const msg = a.dataset.whatsapp;
+  a.href = msg && CONFIG.whatsapp
+    ? `https://wa.me/${CONFIG.whatsapp}?text=${encodeURIComponent(msg)}`
+    : waUrl;
   a.dataset.track = 'WhatsApp';
   if (CONFIG.whatsapp) {
     a.target = '_blank';
@@ -105,6 +109,7 @@ function makeReel(url) {
 
 // Dos filas que corren en sentidos opuestos; cada fila se duplica para que el loop no tenga cortes
 function renderReels(urls) {
+  if (!reelRows) return;
   reelRows.textContent = '';
   if (!urls.length) {
     reelRows.innerHTML = `<div class="container"><div class="reel-empty">Mirá todos nuestros reels en
@@ -184,7 +189,8 @@ links.querySelectorAll('a').forEach((a) => {
 
 // Formulario: arma el mensaje y lo abre en WhatsApp o en el mail
 const form = document.getElementById('contact-form');
-const SERVICIOS = [...form.elements.servicio.options].map((o) => o.value);
+// El script se comparte con rubros.html, que no tiene formulario, reels ni proyectos
+const SERVICIOS = form ? [...form.elements.servicio.options].map((o) => o.value) : [];
 const SEND_COOLDOWN = 30000; // ms entre envíos, para frenar spam
 let lastSent = 0;
 
@@ -195,7 +201,7 @@ const clean = (v, max) => String(v || '')
   .trim()
   .slice(0, max);
 
-form.addEventListener('submit', (e) => {
+form?.addEventListener('submit', (e) => {
   e.preventDefault();
   if (!form.reportValidity()) return;
 
@@ -410,7 +416,7 @@ if (projectVideos.length && 'IntersectionObserver' in window) {
 const projectsToggle = document.querySelector('.projects-toggle');
 const extraProjects = document.querySelectorAll('.project-extra');
 
-projectsToggle.addEventListener('click', () => {
+projectsToggle?.addEventListener('click', () => {
   const open = projectsToggle.getAttribute('aria-expanded') !== 'true';
   extraProjects.forEach((el) => { el.hidden = !open; });
   projectsToggle.setAttribute('aria-expanded', open);
@@ -421,7 +427,7 @@ projectsToggle.addEventListener('click', () => {
 
 // Al hacer clic en un video se abre en grande
 const videoModal = document.querySelector('.video-modal');
-const modalVideo = videoModal.querySelector('video');
+const modalVideo = videoModal?.querySelector('video');
 
 const openVideo = (v) => {
   modalVideo.src = v.currentSrc || v.src;
@@ -444,10 +450,10 @@ projectVideos.forEach((v) => {
   });
 });
 
-videoModal.querySelector('.video-modal-close').addEventListener('click', () => videoModal.close());
+videoModal?.querySelector('.video-modal-close').addEventListener('click', () => videoModal.close());
 // Clic fuera del video cierra
-videoModal.addEventListener('click', (e) => { if (e.target === videoModal) videoModal.close(); });
-videoModal.addEventListener('close', () => {
+videoModal?.addEventListener('click', (e) => { if (e.target === videoModal) videoModal.close(); });
+videoModal?.addEventListener('close', () => {
   modalVideo.pause();
   visibleVideos.forEach((v) => v.play().catch(() => {}));
 });
