@@ -254,13 +254,15 @@ input, textarea, select, button { font: inherit; }
 /* Rubros: bloque corto en la home + página rubros.html con acordeón */
 .rubros-teaser { padding: 112px 0; }
 .rubros-teaser .container { display: flex; flex-direction: column; align-items: center; gap: 40px; }
-.rubro-chips { display: flex; flex-wrap: wrap; justify-content: center; gap: 10px; max-width: 820px; }
-.rubro-chip {
-  padding: 10px 18px; border-radius: 999px; font-size: 15px; font-weight: 500; color: var(--text);
-  background: var(--surface); border: 1px solid var(--line); transition: border-color .2s ease, background-color .2s ease;
+
+.rubro-icons { display: grid; grid-template-columns: repeat(7, 64px); gap: 16px; justify-content: center; }
+.rubro-icon {
+  width: 64px; height: 64px; border-radius: 18px; display: flex; align-items: center; justify-content: center;
+  color: var(--c); background: color-mix(in srgb, var(--c) 14%, #141B48); border: 1px solid color-mix(in srgb, var(--c) 22%, transparent);
+  transition: transform .2s ease, border-color .2s ease;
 }
-.rubro-chip-more { display: none; color: var(--blue-light); border-style: dashed; }
-.rubro-chip:hover { color: #fff; background: #1A2560; border-color: rgba(143, 163, 255, 0.55); }
+.rubro-icon:hover { color: var(--c); transform: translateY(-3px); border-color: var(--c); }
+.rubro-icon svg { width: 30px; height: 30px; }
 
 .rubros-page { padding: 56px 0 120px; min-height: 80vh; }
 .rubros-page .container { display: flex; flex-direction: column; gap: 48px; }
@@ -589,10 +591,10 @@ html:has(.video-modal[open]) { overflow: hidden; }
   .services .container { gap: 40px; }
   .rubros-teaser .container { gap: 28px; }
   .rubros-teaser .btn { align-self: stretch; }
-  .rubro-chip { font-size: 14px; padding: 8px 14px; }
-  .rubro-chip-extra { display: none; }
-  .rubro-chip-more { display: inline-block; }
-  .rubros-page { padding: 28px 0 72px; }
+  .rubro-icons { grid-template-columns: repeat(7, minmax(0, 44px)); gap: 8px; }
+  .rubro-icon { width: auto; height: auto; aspect-ratio: 1; border-radius: 12px; }
+  .rubro-icon svg { width: 22px; height: 22px; }
+    .rubros-page { padding: 28px 0 72px; }
   .rubros-page .container { gap: 36px; }
   .rubro-groups { gap: 32px; }
   .rubro-tiles { gap: 12px; }
