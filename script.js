@@ -53,7 +53,11 @@ const waUrl = CONFIG.whatsapp
   : '#contacto';
 
 document.querySelectorAll('[data-whatsapp]').forEach((a) => {
-  a.href = waUrl;
+  // data-whatsapp="mensaje" arma el chat con un texto propio (ej. tarjetas de rubros)
+  const msg = a.dataset.whatsapp;
+  a.href = msg && CONFIG.whatsapp
+    ? `https://wa.me/${CONFIG.whatsapp}?text=${encodeURIComponent(msg)}`
+    : waUrl;
   a.dataset.track = 'WhatsApp';
   if (CONFIG.whatsapp) {
     a.target = '_blank';
