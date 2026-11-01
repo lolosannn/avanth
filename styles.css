@@ -416,6 +416,7 @@ html:has(.rubro-sheet[open]) { overflow: hidden; }
   border: 1px solid #DFE4F5; overflow: hidden; transition: transform .2s ease, box-shadow .2s ease;
 }
 .project[hidden] { display: none; }
+.projects-hint { display: none; align-items: center; gap: 6px; margin-top: -20px; font-size: 14px; font-weight: 600; color: #2340C4; }
 .project:hover { transform: translateY(-4px); box-shadow: 0 20px 40px rgba(12, 24, 73, 0.12); }
 .project-media {
   aspect-ratio: 4 / 3; background: #E3E8FA; display: flex; align-items: center; justify-content: center;
@@ -638,8 +639,21 @@ html:has(.video-modal[open]) { overflow: hidden; }
   .step p { font-size: 13px; line-height: 1.5; }
 
   /* Proyectos */
+  /* Proyectos en celu: carrusel horizontal con todos los proyectos */
+  .projects-toggle { display: none; }
+  .project-grid {
+    display: flex; gap: 14px; margin: 0 -20px; padding: 4px 20px 16px;
+    overflow-x: auto; scroll-snap-type: x mandatory; scroll-padding: 0 20px;
+    -webkit-overflow-scrolling: touch; scrollbar-width: none;
+  }
+  .project-grid::-webkit-scrollbar { display: none; }
+  .project, .project[hidden] { display: flex; flex: 0 0 84%; scroll-snap-align: start; }
+  .project-grid .reveal { opacity: 1; transform: none; }
+  .project:hover { transform: none; }
+  .projects-hint { display: flex; }
   .project-media { aspect-ratio: 16 / 10; }
-  .project-body { padding: 20px; }
+  .project-body { padding: 18px; }
+  .project p { font-size: 14px; }
 
   /* Instagram */
   .instagram { gap: 36px; }
