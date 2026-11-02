@@ -393,11 +393,11 @@ function update(p, time) {
   camera.position.x += Math.sin(time * 0.0004) * 0.15; camera.position.y += Math.sin(time * 0.0005) * 0.08;
   camera.lookAt(tmpT);
   const fovIn = range(p, 0.3, 0.44) * (1 - range(p, 0.8, 0.9));
-  camera.fov = (W / H < 1 ? 50 : 32) + fovIn * (W / H < 1 ? 8 : 18); camera.updateProjectionMatrix();
+  camera.fov = (W / H < 1 ? 50 : 32) + fovIn * (W / H < 1 ? 20 : 18); camera.updateProjectionMatrix();
   // frame offset: scene to the right on desktop at the start/end (text on the left), lower on phones
   const side = MOBILE ? 0 : 0.2 + 0.05 * Math.max(1 - range(p, 0.05, 0.22), range(p, 0.84, 0.98));
   const ends = Math.max(1 - range(p, 0.08, 0.26), range(p, MOBILE ? 0.8 : 0.84, MOBILE ? 0.88 : 0.98));
-  const down = MOBILE ? ends * 0.17 - (1 - ends) * 0.2 : 0;
+  const down = MOBILE ? ends * 0.17 - (1 - ends) * 0.13 : 0;
   camera.setViewOffset(W, H, -side * W, -down * H, W, H);
 
   // shutter: half down -> open while approaching
