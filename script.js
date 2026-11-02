@@ -162,6 +162,49 @@ async function loadFeedReels() {
     .filter(isReelUrl);
 }
 
+// Los reels son iframes de Instagram: no se pueden pausar desde acá, así que el que se reprodujo
+// se recarga (y se calla) cuando sale de la pantalla, sea scrolleando para arriba, abajo o de costado.
+if (reelRows) {
+  const touched = new Set();   // iframes en los que se hizo clic o tap
+  const visible = new Set();   // iframes que se ven ahora
+  let tapSeen = false;         // el navegador avisa cuando se toca un iframe
+  const resetReel = (frame) => {
+    touched.delete(frame);
+    const src = frame.src;
+    if (src) frame.src = src;
+  };
+  const frameIO = new IntersectionObserver((entries) => {
+    entries.forEach(({ target, isIntersecting, intersectionRatio }) => {
+      if (isIntersecting && intersectionRatio >= 0.25) { visible.add(target); return; }
+      visible.delete(target);
+      if (touched.has(target)) resetReel(target);
+    });
+  }, { threshold: [0, 0.25] });
+  const watchFrames = () => reelRows.querySelectorAll('iframe').forEach((f) => {
+    if (f.dataset.reelWatched) return;
+    f.dataset.reelWatched = '1';
+    frameIO.observe(f);
+  });
+  new MutationObserver(watchFrames).observe(reelRows, { childList: true, subtree: true });
+  // Al hacer clic o tap en un iframe, la página pierde el foco y el iframe queda activo
+  window.addEventListener('blur', () => {
+    setTimeout(() => {
+      const el = document.activeElement;
+      if (el && el.tagName === 'IFRAME' && reelRows.contains(el)) { touched.add(el); tapSeen = true; }
+    }, 0);
+  });
+  // Por si el navegador no avisa el tap: al irse de la sección se recargan los reels que estaban a la vista
+  const igSection = document.getElementById('instagram');
+  if (igSection) {
+    let lastVisible = [];
+    new IntersectionObserver(([entry]) => {
+      if (entry.isIntersecting || tapSeen) return;
+      lastVisible.forEach(resetReel);
+    }, { threshold: 0 }).observe(igSection);
+    setInterval(() => { if (visible.size) lastVisible = [...visible]; }, 1000);
+  }
+}
+
 if (CONFIG.instagramFeed) {
   loadFeedReels()
     .then((urls) => renderReels((urls.length ? urls : manualReels).slice(0, CONFIG.instagramMaxReels)))
