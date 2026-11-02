@@ -55,107 +55,46 @@
   </header>
 
   <main>
-    <!-- HERO -->
-    <section id="inicio" class="hero grid-bg">
-      <div class="container">
-        <div class="hero-grid">
-          <div class="hero-copy">
-            <span class="badge"><span class="dot dot-pulse"></span>Agenda abierta para nuevos proyectos</span>
-            <h1>Diseño web, automatización y software <span class="serif">a medida</span></h1>
-            <p class="lead">Creamos sitios que convierten, automatizamos las tareas que te frenan y desarrollamos el software que tu negocio necesita para avanzar.</p>
-            <div class="hero-actions">
-              <a href="#contacto" class="btn btn-white">Contanos tu proyecto
-                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
-              </a>
-              <a href="#servicios" class="btn btn-link">Ver servicios
-                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 5v14M6 13l6 6 6-6"/></svg>
-              </a>
-            </div>
-          </div>
+    <!-- HERO: recorrido 3D con scroll (assets/world/world.js) -->
+    <section id="inicio" class="sw-world">
+      <div class="sw-stage">
+        <canvas id="sw-gl" aria-hidden="true"></canvas>
+        <div class="sw-vignette" aria-hidden="true"></div><div class="sw-scrim" aria-hidden="true"></div>
 
-          <div class="hero-visual" aria-hidden="true">
-            <div class="hv-layer" data-depth="10">
-              <div class="browser">
-                <div class="browser-bar">
-                  <span class="c" style="background:#FF5F57"></span>
-                  <span class="c" style="background:#FEBC2E"></span>
-                  <span class="c" style="background:#28C840"></span>
-                  <span class="browser-url"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="5" y="11" width="14" height="10" rx="2"/><path d="M8 11V8a4 4 0 0 1 8 0v3"/></svg><span class="browser-url-text">kromastudio.com</span></span>
-                </div>
-                <div class="browser-screens">
-                  <video class="browser-screen active" src="assets/proyectos/kroma-studio.mp4" poster="assets/proyectos/kroma-studio.jpg" data-url="kromastudio.com" muted loop playsinline preload="metadata"></video>
-                  <video class="browser-screen" src="assets/proyectos/smash-burger.mp4" poster="assets/proyectos/smash-burger.jpg" data-url="smashburger.com.ar" muted loop playsinline preload="none"></video>
-                  <video class="browser-screen" src="assets/proyectos/xv-matilda.mp4" poster="assets/proyectos/xv-matilda.jpg" data-url="xvmatilda.com" muted loop playsinline preload="none"></video>
-                </div>
-              </div>
-            </div>
-
-            <div class="hv-layer" data-depth="22">
-              <div class="flow-card">
-                <div class="flow-head">
-                  <span>Flujo: nuevo lead</span>
-                  <span class="flow-status"><span class="dot dot-pulse" style="width:7px;height:7px"></span>Activo</span>
-                </div>
-                <div class="flow-lead">
-                  <span class="flow-avatar">JP</span>
-                  <span><strong>Juan Pérez</strong><small>“Quiero una web”</small></span>
-                </div>
-                <div class="flow-steps">
-                  <div class="flow-step">
-                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="4" y="3" width="16" height="18" rx="2"/><path d="M8 8h8M8 12h8M8 16h5"/></svg>
-                    Formulario web
-                    <svg class="flow-check" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12l5 5L20 7"/></svg>
-                  </div>
-                  <div class="flow-link"><span></span></div>
-                  <div class="flow-step">
-                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><ellipse cx="12" cy="6" rx="8" ry="3"/><path d="M4 6v12c0 1.7 3.6 3 8 3s8-1.3 8-3V6M4 12c0 1.7 3.6 3 8 3s8-1.3 8-3"/></svg>
-                    Guardar en CRM
-                    <svg class="flow-check" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12l5 5L20 7"/></svg>
-                  </div>
-                  <div class="flow-link"><span></span></div>
-                  <div class="flow-step">
-                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12a9 9 0 0 1-13.5 7.8L3 21l1.2-4.5A9 9 0 1 1 21 12z"/></svg>
-                    Respuesta por WhatsApp
-                    <svg class="flow-check" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12l5 5L20 7"/></svg>
-                  </div>
-                </div>
-              </div>
-            </div>
-
-            <div class="hv-layer" data-depth="16">
-              <div class="terminal">
-                <div class="muted">$ <span class="white term-cmd"></span><span class="term-caret"></span></div>
-                <div class="term-line">✓ build optimizado</div>
-                <div class="term-line">✓ tests pasados</div>
-                <div class="term-line ok">● En producción</div>
-              </div>
-            </div>
-
-            <div class="hv-layer" data-depth="30">
-              <div class="notif">
-                <span class="notif-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12a9 9 0 0 1-13.5 7.8L3 21l1.2-4.5A9 9 0 1 1 21 12z"/></svg></span>
-                <span class="notif-body">
-                  <span class="notif-top"><strong>WhatsApp</strong><small>ahora</small></span>
-                  <span>Juan recibió respuesta en <strong>3 s</strong>. Lead guardado ✓</span>
-                </span>
-              </div>
-            </div>
+        <div class="sw-copy" id="sw-c0" data-in="-1" data-out="0.12">
+          <span class="badge"><span class="dot dot-pulse"></span>Agenda abierta para nuevos proyectos</span>
+          <h1>Diseño web, automatización y software <span class="serif">a medida</span></h1>
+          <p class="lead">Creamos sitios que convierten, automatizamos las tareas que te frenan y desarrollamos el software que tu negocio necesita para avanzar.</p>
+          <div class="sw-actions">
+            <a href="#contacto" class="btn btn-whatsapp" data-whatsapp><svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M12 2a10 10 0 0 0-8.6 15.1L2 22l5-1.3A10 10 0 1 0 12 2Zm5.6 14.1c-.2.7-1.4 1.3-2 1.4-.5.1-1.2.1-1.9-.1a17 17 0 0 1-1.7-.7 13.3 13.3 0 0 1-5.1-4.5c-.4-.5-1-1.6-1-2.8 0-1.3.6-1.9.9-2.2.2-.2.5-.3.7-.3h.5c.2 0 .4 0 .6.5l.8 2c.1.2.1.3 0 .5l-.3.5-.4.4c-.1.2-.3.3-.1.6.2.3.8 1.3 1.6 2 1.1 1 2.1 1.3 2.4 1.5.3.1.5.1.6-.1l.9-1.1c.2-.3.4-.2.6-.1l1.9.9c.3.1.5.2.5.3.1.2.1.7-.1 1.3Z"/></svg>Escribinos por WhatsApp</a>
+            <a href="#servicios" class="btn btn-link">Ver servicios <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 5v14M6 13l6 6 6-6"/></svg></a>
           </div>
         </div>
 
-        <div class="tech">
-          <span class="tech-label">Tecnologías con las que trabajamos</span>
-          <div class="marquee">
-            <div class="marquee-track">
-              <ul class="tech-list">
-                <li>React</li><li>Next.js</li><li>Node.js</li><li>Python</li><li>WordPress</li><li>n8n</li><li>Supabase</li><li>OpenAI</li>
-              </ul>
-              <ul class="tech-list" aria-hidden="true">
-                <li>React</li><li>Next.js</li><li>Node.js</li><li>Python</li><li>WordPress</li><li>n8n</li><li>Supabase</li><li>OpenAI</li>
-              </ul>
-            </div>
+        <div class="sw-copy sw-mid" data-in="0.30" data-out="0.52" aria-hidden="true">
+          <span class="sw-eyebrow">01 · Diseño web</span>
+          <p class="sw-h2">Tu local, abierto <span class="serif">las 24 horas</span>.</p>
+          <p class="lead">Una web rápida que muestra lo que vendés y lleva cada consulta directo a tu WhatsApp.</p>
+        </div>
+
+        <div class="sw-copy sw-mid" data-in="0.56" data-out="0.78" aria-hidden="true">
+          <span class="sw-eyebrow">02 · Automatización</span>
+          <p class="sw-h2">Pedidos y turnos que <span class="serif">llegan solos</span>.</p>
+          <p class="lead">Respuestas, recordatorios y avisos automáticos para que no se te escape ningún cliente.</p>
+        </div>
+
+        <div class="sw-copy sw-end" data-in="0.86" data-out="2">
+          <span class="sw-eyebrow">03 · Resultado</span>
+          <p class="sw-h2">Más clientes, <span class="serif">menos vueltas</span>.</p>
+          <p class="lead">Contanos qué necesita tu negocio y te decimos cómo lo resolvemos.</p>
+          <div class="sw-actions">
+            <a href="#contacto" class="btn btn-whatsapp" data-whatsapp><svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M12 2a10 10 0 0 0-8.6 15.1L2 22l5-1.3A10 10 0 1 0 12 2Zm5.6 14.1c-.2.7-1.4 1.3-2 1.4-.5.1-1.2.1-1.9-.1a17 17 0 0 1-1.7-.7 13.3 13.3 0 0 1-5.1-4.5c-.4-.5-1-1.6-1-2.8 0-1.3.6-1.9.9-2.2.2-.2.5-.3.7-.3h.5c.2 0 .4 0 .6.5l.8 2c.1.2.1.3 0 .5l-.3.5-.4.4c-.1.2-.3.3-.1.6.2.3.8 1.3 1.6 2 1.1 1 2.1 1.3 2.4 1.5.3.1.5.1.6-.1l.9-1.1c.2-.3.4-.2.6-.1l1.9.9c.3.1.5.2.5.3.1.2.1.7-.1 1.3Z"/></svg>Escribinos por WhatsApp</a>
+            <a href="#servicios" class="btn btn-link">Ver servicios <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 5v14M6 13l6 6 6-6"/></svg></a>
           </div>
         </div>
+
+        <div class="sw-hint" aria-hidden="true"><span class="sw-mouse"></span>Scrolleá</div>
+        <div class="sw-rail" aria-hidden="true"><i class="on"></i><i></i><i></i><i></i></div>
       </div>
     </section>
 
@@ -501,5 +440,7 @@
 
   <script src="analytics-config.js"></script>
   <script src="script.js"></script>
+  <script type="importmap">{ "imports": { "three": "./assets/world/vendor/three.module.min.js" } }</script>
+  <script type="module" src="assets/world/world.js"></script>
 </body>
 </html>
